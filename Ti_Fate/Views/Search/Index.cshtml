@@ -1,0 +1,143 @@
+﻿@model Ti_Fate.ViewModels.SearchViewModel
+
+<div class="row container-fluid">
+    <label class="btn-lg btn-default animation-on-hover">
+        <i lstyle="margin-bottom: 5%; margin-right: 10px"></i>[ @Model.SearchString ] 搜尋結果
+    </label>
+</div>
+
+<hr />
+
+<div id="search-result">
+    <div v-if="isNoResult" class="text-center">
+        <h3>查無相關資訊</h3>
+    </div>
+
+    <div class="row">
+        <template v-for="result in profile_results">
+            <div class="col-md-2  d-flex align-content-stretch flex-wrap">
+                <a v-on:click="toProfile(result.id)" class="card" href="#">
+                    <div class="card-body text-center ">
+                        <img v-bind:src="result.firstPicture|srcEditor" class="avatar" style="width: 70px; height: 70px" alt="profile photo">
+                        <hr>
+
+                        <span v-bind:class="locationType(result.location)">{{result.location}}</span>
+                        <hr>
+
+                        <h4>{{result.name}}</h4>
+                        <hr>
+
+                        <h5 class="card-description">
+                            {{result.position}} / {{result.department}} / {{result.teamName}}
+                        </h5>
+                    </div>
+                </a>
+            </div>
+        </template>
+    </div>
+
+    <template v-for="result in info_results">
+        <template v-if="result.list.length > 0">
+            <button class="btn btn-default animation-on-hover" type="button">{{result.title}}</button>
+
+            <div :id="'search-'+result.type" role="tablist" aria-multiselectable="true" class="card-collapse">
+                <div v-for="item in result.list" class="card card-body">
+                    <a aria-controls="collapseThree" aria-expanded="false" class="collapsed" :data-parent="'#search-'+result.type" data-toggle="collapse" :href="'#'+result.type+item.id">
+                        <span v-if="result.type == 'clubs'" class="badge badge-pill badge-info">{{item.clubName}}</span>
+
+                        <div class="d-flex justify-content-between">
+                            <h3 class="card-title">
+                                <i class="tim-icons icon-pin"></i>
+                                {{item.title}}
+                            </h3>
+                        </div>
+                        <h5>發布時間｜ {{item.publishTime}}</h5>
+                        <h5>活動時間｜ {{item.startTime}} ~ {{item.endTime}}</h5>
+                        <div class="text-center">
+                            <i class="tim-icons icon-minimal-down text-success"></i>
+                        </div>
+                    </a>
+
+                    <div :id="result.type+item.id" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="card-body">
+                            <h3 class="btn-simple text-info">公告內容</h3>
+                            <p>
+                                <div v-html="item.content"></div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </template>
+</div>
+
+<script>
+    var app = new Vue({
+        el: '#search-result',
+        data () {
+            return {
+                info_results: null,
+                profile_results: null,
+                isNoResult: true
+            }
+        },
+        mounted () {
+            axios
+                .get('@Url.Action("SearchInfos", "Search", new {searchString = Model.SearchString})')
+                .then(function(response) {
+                    app._data.info_results = [
+                        {
+                            type: "welfare",
+                            title: "福委公告",
+                            list: response.data.welfare
+                        }, {
+                            type: "meetUp",
+                            title: "Meet Up",
+                            list: response.data.meetUp
+                        }, {
+                            type: "clubs",
+                            title: "社團資訊",
+                            list: response.data.combineClubInfos
+                        }, {
+                            type: "external",
+                            title: "外部研討",
+                            list: response.data.externalInfo
+                        }
+                    ];
+                    for (var i = 0; i < app._data.info_results.length; i++) {
+                        if (app._data.info_results[i].list.length > 0) {
+                            app._data.isNoResult = false;
+                            break;
+                        }
+                    }
+
+                    axios
+                    .get('@Url.Action("SearchProfile", "Search", new {searchString = Model.SearchString})')
+                    .then(function(response) {
+                        app._data.profile_results = response.data;
+                        if (app._data.profile_results.length > 0) {
+                            app._data.isNoResult = false;
+                        }
+                    });
+                });
+        },
+        methods: {
+            locationType: function(type) {
+                if (type === "臺中") {
+                    return 'badge badge-pill badge-success';
+                } else {
+                    return 'badge badge-pill badge-info';
+                }
+            },
+            toProfile: function(id) {
+                window.location.href = '@Url.Action("Profile", "Profile", new {profileId = "ID"})'.replace("ID", parseInt(id));
+            }
+        },
+        filters: {
+            srcEditor: function(value) {
+                return value.toString().replace("~", "");
+            }
+        }
+    });
+</script>

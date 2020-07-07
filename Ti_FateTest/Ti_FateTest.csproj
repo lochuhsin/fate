@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.7.2" />
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TiFateDB\TiFateDB.sqlproj" />
+    <ProjectReference Include="..\Ti_Fate.CoreTest\Ti_Fate.CoreTest.csproj" />
+    <ProjectReference Include="..\Ti_Fate.Core\Ti_Fate.Core.csproj" />
+    <ProjectReference Include="..\Ti_Fate.Dao\Ti_Fate.Dao.csproj" />
+    <ProjectReference Include="..\Ti_Fate\Ti_Fate.csproj" />
+  </ItemGroup>
+
+</Project>

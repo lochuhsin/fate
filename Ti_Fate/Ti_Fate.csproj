@@ -1,0 +1,103 @@
+<Project Sdk="Microsoft.NET.Sdk.Web" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\UploadFile\20200604125553364.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200604135558000.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200604142725487.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200604144230584.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200604144741250.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200604144748945.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200604162510606.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200604164928439.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200604173156604.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200604173206777.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200605094217982.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200605094236385.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200605094241893.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200605094246877.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200605094252592.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200605094300096.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200605094802613.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200608112912856.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200608115730134.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200608115735792.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200608115740380.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200608115744857.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200608115749792.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200608175759164.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200608181811783.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200608182015655.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200608184522604.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200609174224103.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200609174321991.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200609174452240.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200609174457382.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200609180139843.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200609180808543.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200609181215230.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200609181411527.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200609181443767.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200609183051109.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200609183125922.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200609184712408.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200610165024544.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200610165030912.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200610165036439.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200611140608545.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200611173254563.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200611174634885.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200612102302945.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200612155823202.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200612160442715.Image from iOS %284%29.jpg" />
+    <Content Remove="wwwroot\UploadFile\20200612160521802.Image from iOS %285%29.jpg" />
+    <Content Remove="wwwroot\UploadFile\20200617144457897.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200617144505403.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200617160619053.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200617160702297.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200617161200676.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200617161249010.jpeg" />
+    <Content Remove="wwwroot\UploadFile\20200617161331922.jpeg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AntiXSS" Version="4.3.0" />
+    <PackageReference Include="bootstrap" Version="4.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.4" />
+    <PackageReference Include="NLog" Version="4.7.2" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.2" />
+    <PackageReference Include="NSubstitute" Version="4.2.1" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Quartz" Version="3.0.7" />
+    <PackageReference Include="System.DirectoryServices" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ti_Fate.Core\Ti_Fate.Core.csproj" />
+    <ProjectReference Include="..\Ti_Fate.Dao\Ti_Fate.Dao.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

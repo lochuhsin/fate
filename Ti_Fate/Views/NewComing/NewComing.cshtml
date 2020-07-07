@@ -1,0 +1,73 @@
+﻿@using Newtonsoft.Json
+@model Ti_Fate.ViewModels.NewFaterViewModel
+<div class="row container-fluid">
+    <label class="btn-lg btn-success btn-round animation-on-hover">
+        <i class="tim-icons icon-shape-star" style="margin-bottom: 5%; margin-right: 10px"></i> 新人介紹
+    </label>
+</div>
+<hr>
+<div class="col-12" id="faterList">
+    <div v-for="faterList in AllNewFater">
+        <label class="btn-lg btn-warning h4 text-center font-weight-bolder animation-on-hover">
+            {{faterList.Month}} 月新人
+        </label>
+        <div class="row">
+            <div v-for="fater in faterList.List" class="col-md-2  d-flex align-content-stretch flex-wrap">
+                <a v-on:click="toFaterProfile(fater.Id)" class="card" href="#">
+                    <div class="card-body text-center ">
+                        <img class="avatar" style="width: 70px; height: 70px" :src="fater.FirstPicture|srcEditor" alt="fater照片">
+                        <hr>
+                        <span :class="locationType(fater.Location)">{{fater.Location}}</span>
+                        <hr>
+                        <h4>{{fater.Name}}</h4>
+                        <hr>
+                        <h5 class="card-description">
+                            {{fater.Position}}/{{fater.Department}}/{{fater.TeamName}}
+                        </h5>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<script>
+    var app = new Vue({
+        el: '#faterList',
+        data: {
+            AllNewFater: [
+                {
+                    Month: @DateTime.Now.Month ,
+                    List: @Html.Raw(JsonConvert.SerializeObject(Model.FirstMonthNewFaters))
+                },
+                {
+                    Month: @(DateTime.Now.Month-1),
+                    List: @Html.Raw(JsonConvert.SerializeObject(Model.SecondMonthNewFaters))
+                },
+                {
+
+                    Month: @(DateTime.Now.Month-2),
+                    List: @Html.Raw(JsonConvert.SerializeObject(Model.ThirdMonthNewFaters))
+                }
+            ]
+        },
+        methods: {
+            toFaterProfile: function (id) {
+                window.location.href = '@Url.Action("Profile", "Profile", new {profileId = "ID"})'.replace("ID", parseInt(id));
+            },
+            locationType: function (type) {
+                if (type === "臺中") {
+                    return 'badge badge-pill badge-success';
+                } else {
+                    return 'badge badge-pill badge-info';
+                }
+            }
+        },
+        filters: {
+            srcEditor: function(value) {
+                return value.toString().replace("~", "");
+            }
+        }
+    });
+</script>

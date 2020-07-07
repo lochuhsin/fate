@@ -1,0 +1,118 @@
+﻿@using Ti_Fate.Core.Tools
+@model Ti_Fate.ViewModels.ManageExternalInfoViewModel
+
+
+<link href="~/css/summernote-lite.min.css" rel="stylesheet">
+<script src="~/js/plugins/summernote-lite.min.js"></script>
+<style type="text/css">
+    .open .form-control {
+        color: #42515f;
+    }
+
+    .note-modal-footer {
+        height: 60px;
+    }
+</style>
+<div class="row container-fluid">
+    <label class="btn-lg btn-success btn-round animation-on-hover">
+        @{
+            if (Model.IsAddExternal())
+            {
+                <i class="tim-icons icon-pin" style="margin-bottom: 5%; margin-right: 10px"></i>
+                <span>新增外部研討</span>
+
+            }
+            else
+            {
+                <i class="tim-icons icon-pin" style="margin-bottom: 5%; margin-right: 10px"></i>
+                <span>編輯外部研討</span>
+            }
+        }
+    </label>
+</div>
+<hr/>
+<form asp-controller="ManageExternalInfo" asp-action="ManageExternal" method="post" class="form" enctype="multipart/form-data">
+    <div asp-validation-summary="All" id="myCustomSummary"></div>
+    <input asp-for="PublishTime" value="@Model.PublishTime?.ToString("s")" type="datetime-local" hidden />
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <h4 class="header-title">外部研討主題</h4>
+                            <input asp-for="Title" class="form-control" placeholder="請輸入公告標題..." />
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <h4 class="header-title">開始時間</h4>
+                                <input asp-for="StartTime" value="@Model.StartTime?.ToString("s")" type="datetime-local" class="form-control" min="2020-01-01">
+                                <small class="form-text text-muted">請輸入活動開始時間</small>
+                            </div>
+                            <div class="col">
+                                <h4 class="header-title">結束時間</h4>
+                                <input asp-for="EndTime" value="@Model.EndTime?.ToString("s")" type="datetime-local" class="form-control">
+                                <small class="form-text text-muted">請輸入活動結束時間，若未填寫則不顯示</small>
+                            </div>
+                        </div>
+                        <textarea id="summernote" asp-for="Content"></textarea>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a href="@Url.Action("ExternalInfo","ExternalInfo", new{profileId = @Model.Id})" class="btn btn-success btn-lg animation-on-hover">
+                        取消
+                    </a>
+                    <button class="btn btn-success btn-lg animation-on-hover" style="margin: 10px auto">
+                        送出
+                    </button>
+                    @if (!Model.IsAddExternal())
+                    {
+                        <a data-toggle="modal" data-target="#deleteModal" class="btn btn-danger btn-lg animation-on-hover" style="margin: 10px auto">
+                            刪除
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">刪除公告</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="tim-icons icon-simple-remove"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>確定要刪除此篇公告嗎？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("DeleteExternalInfo", "ManageExternalInfo", new {id = Model.Id, announcementType = "External" })'">確定刪除</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="note-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="tim-icons icon-simple-remove"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/plugins/summernote.js"></script>

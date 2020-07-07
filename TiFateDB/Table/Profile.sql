@@ -1,0 +1,27 @@
+﻿CREATE TABLE [dbo].[Profile]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Name] NVARCHAR(20) NULL, 
+    [Account] NVARCHAR(20) NULL, 
+    [Picture] NVARCHAR(1000) NULL, 
+    [Introduce] NVARCHAR(100) NULL, 
+    [Position] VARCHAR(20) NULL, 
+    [Department] VARCHAR(20) NULL, 
+    [TeamName] VARCHAR(20) NULL, 
+    [Birth] DATETIME NULL, 
+    [Constellation] NVARCHAR(20) NULL, 
+    [Skills] NVARCHAR(100) NULL, 
+    [Music] NVARCHAR(30) NULL, 
+    [Movie] NVARCHAR(30) NULL, 
+    [Sport] NVARCHAR(30) NULL, 
+    [Book] NVARCHAR(30) NULL, 
+    [Food] NVARCHAR(30) NULL, 
+    [Others] NVARCHAR(30) NULL, 
+    [Drink] NVARCHAR(30) NULL, 
+    [Relationship] NVARCHAR(30) NULL, 
+    [Country] NCHAR(30) NULL, 
+    [PermissionId] INT NULL, 
+    [FaterId] INT NULL, 
+    [OnBoardDate] DATETIME NULL, 
+    [Location] NVARCHAR(30) NULL
+)

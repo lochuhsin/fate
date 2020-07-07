@@ -1,0 +1,286 @@
+﻿@using Ti_Fate.Core.DomainModel
+@using Ti_Fate.ViewModels
+@model Ti_Fate.ViewModels.EditProfileViewModel
+
+<label class="btn-lg btn-success btn-round animation-on-hover">
+    <i class="tim-icons icon-pin" style="margin-bottom: 5%; margin-right: 10px"></i>編輯資料
+</label>
+<form asp-controller="EditProfile" asp-action="EditProfile" method="post" class="form" enctype="multipart/form-data">
+    <div asp-validation-summary="All" id="myCustomSummary"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card card-upgrade">
+                    <div class="card card-user">
+                        <div class="card-body">
+                            <div class="col-md-12 text-center">
+                                <div class="card  card-plain">
+                                    <div class="card-header">
+                                        <h3 class="card-title">基本資料*</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive-lg">
+                                            <table class="table tablesorter " id="">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-right">
+                                                            姓名
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" asp-for="Name" value="@Model.Name" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right">
+                                                            生日
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" asp-for="Birth" type="date" id="datefield" value="@Model.Birth.ToString("yyyy-MM-dd")" min="1800-01-01" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right">
+                                                            到職日期
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" asp-for="OnBoardDate" type="month" value="@Model.OnBoardDate.ToString("yyyy-MM")" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right">
+                                                            工作地點
+                                                        </td>
+                                                        <td>
+                                                            <select class="form-control btn btn-secondary dropdown-toggle" asp-for="Location" value="@Model.Location">
+                                                                @foreach (var selectListItem in Model.LocationSelectList)
+                                                                {
+                                                                    <option class="dropdown-item" value="@selectListItem.Value">@selectListItem.Text</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right">
+                                                            職位
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" asp-for="Position" value="@Model.Position" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right">
+                                                            部門
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" asp-for="Department" value="@Model.Department" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right">
+                                                            團隊
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" asp-for="TeamName" value="@Model.TeamName" />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-upgrade">
+                    <div class="card card-user">
+                        <div class="card-body">
+                            <p class="card-text">
+                                <div class="col-md-12 text-center">
+                                    <div class="card  card-plain">
+                                        <div class="card-header">
+                                            <h3 class="card-title"> 詳細資料</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive-lg">
+                                                <table class="table tablesorter " id="">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="text-right">
+                                                                感情狀態
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control btn btn-secondary dropdown-toggle" asp-for="Relationship" value="@Model.Relationship">
+                                                                    @foreach (var selectListItem in Model.RelationshipSelectList)
+                                                                    {
+                                                                        <option class="dropdown-item" value="@selectListItem.Value">@selectListItem.Text</option>
+                                                                    }
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-right">
+                                                                星座
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" asp-for="Constellation" value="@Model.Constellation" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-right">
+                                                                專長
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" asp-for="Skills" value="@Model.Skills" />
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-upgrade">
+                    <div class="card card-user">
+                        <div class="card-body">
+                            <p class="card-text">
+                                <div class="col-md-12 text-center">
+                                    <div class="card  card-plain">
+                                        <div class="card-header">
+                                            <h3 class="card-title"> 喜歡的事</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive-lg">
+                                                <table class="table tablesorter " id="">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="text-right">
+                                                                音樂
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" asp-for="Music" value="@Model.Music" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-right">
+                                                                電影
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" asp-for="Movie" value="@Model.Movie" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-right">
+                                                                運動
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" asp-for="Sport" value="@Model.Sport" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-right">
+                                                                書籍
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" asp-for="Book" value="@Model.Book" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-right">
+                                                                <div>食物</div>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" asp-for="Food" value="@Model.Food" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-right">
+                                                                <div>國家</div>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" asp-for="Country" value="@Model.Country" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-right">
+                                                                <div>飲酒</div>
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control btn btn-secondary dropdown-toggle" asp-for="Drink" value="@Model.Drink">
+                                                                    @foreach (var selectListItem in Model.DrinkSelectList)
+                                                                    {
+                                                                        <option class="dropdown-item" value="@selectListItem.Value">@selectListItem.Text</option>
+                                                                    }
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-right">
+                                                                其他
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" asp-for="Others" value="@Model.Others" />
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-user">
+                    <div class="card-body text-center">
+                        <div class="author">
+                            <div class="block block-one"></div>
+                            <div class="block block-two"></div>
+                            <div class="block block-three"></div>
+                            <div class="block block-four"></div>
+                        </div>
+                        <h3 for="introduce">自我介紹</h3>
+                        <textarea class="form-control" id="introduce" rows="5" asp-for="Introduce" value="@Model.Introduce" placeholder="請在此輸入自我介紹..."></textarea>
+                    </div>
+
+                </div>
+                <div class="card-body ">
+                    <h3 class="header-title text-danger">貼心小提醒</h3>
+                    <h4 class="text-danger">
+                        * 個人資料將出現在今日有緣人頁面 *
+                    </h4>
+                </div>
+            </div>
+            <div class="col-md-8 text-center">
+
+                <a href="@Url.Action("Profile","Profile", new{profileId = @Model.Id})">
+                    <button type="button" class="btn btn-success animation-on-hover">取消</button>
+                </a>
+                <button type="submit" class="btn btn-success animation-on-hover">送出</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+    document.getElementById("datefield").setAttribute("max", today);
+
+</script>
+

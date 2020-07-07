@@ -1,0 +1,122 @@
+﻿@using Ti_Fate.Extensions
+@using Ti_Fate.Core.DomainModel
+@model Ti_Fate.ViewModels.ClubsInfoViewModel
+
+@{
+    var loginSession = Context.Session.GetObject<LoginSession>("LoginSession");
+}
+
+<div class="row container-fluid">
+    <label class="btn-lg btn-success btn-round animation-on-hover">
+        <i class="tim-icons icon-pin" style="margin-bottom: 5%; margin-right: 10px"></i>社團公告
+    </label>
+    @if (loginSession.AccountPermission.ModifyClubs)
+    {
+        <div class="ml-auto">
+            <a asp-controller="ManageClubsInfo" asp-action="AddClubsInfo" asp-route-announcementType="Clubs" class="btn btn-info btn-simple">
+                <i class="tim-icons icon-simple-add"></i>
+                <p class="d-lg-inline-block text-info">新增公告</p>
+            </a>
+        </div>
+    }
+</div>
+<hr />
+<div class="card">
+    <div class="card-body">
+        <div class="card-collapse">
+            @foreach (var clubsDomainModel in Model.ClubNameList)
+            {
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label" style="color: white;font-size: 15px;">
+                        <input class="form-check-input" type="checkbox" id="checkbox-@clubsDomainModel.Id" value="option2" checked="" onchange="ShowOrHide('@clubsDomainModel.Id')">
+                        @clubsDomainModel.ClubName
+                        <span class="form-check-sign"></span>
+                    </label>
+                </div>
+            }
+        </div>
+        </div>
+    </div>
+<div id="accordion" role="tablist" aria-multiselectable="true" class="card-collapse">
+    @foreach (var clubsInfo in Model.ClubsInfoList)
+    {
+        <div class="card card-body club_@clubsInfo.ClubId">
+            <a aria-controls="collapseThree" aria-expanded="false" class="collapsed" data-parent="#accordion" data-toggle="collapse" href="#announcement-@clubsInfo.Id">
+                <span class ="badge badge-pill badge-info">@clubsInfo.ClubName</span>
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title">
+                        <i class="tim-icons icon-pin"></i>
+                        @clubsInfo.Title
+                    </h3>
+                    @if (loginSession.AccountPermission.ModifyClubs)
+                    {
+                        <div class="flex-column-reverse">
+                            <label onclick="location.href = '@Url.Action("EditClubsInfo", "ManageClubsInfo", new {id = clubsInfo.Id, announcementType = "Clubs"})'" class="btn btn-info btn-simple btn-icon btn-round">
+                                <p class="tim-icons icon-pencil"></p>
+                            </label>
+                            <label class="btn btn-info btn-simple btn-icon btn-round btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="GetId(@clubsInfo.Id)">
+                                <p class="tim-icons icon-trash-simple"></p>
+                            </label>
+                            <input value="" id="getId" hidden="" disabled=""/>
+                        </div>
+                    }
+                </div>
+                <h5>發布時間｜@clubsInfo.PublishTime</h5>
+                <h5>活動時間｜@clubsInfo.StartTime ～ @clubsInfo.EndTime </h5>
+                <div class="text-center">
+                    <i class="tim-icons icon-minimal-down text-success"></i>
+                </div>
+            </a>
+            <div id="announcement-@clubsInfo.Id" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="card-body">
+                    <h3 class="btn-simple text-info">公告內容</h3>
+                    <p>
+                        @Html.Raw(clubsInfo.Content)
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">刪除公告</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="tim-icons icon-simple-remove"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>確定要刪除此篇公告嗎？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="DeleteClubsInfo()">確定刪除</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function GetId(Id) {
+        $('#getId').val(Id);
+    }
+    function DeleteClubsInfo() {
+        var id = $('#getId').val();
+        window.location.href = '@Url.Action("DeleteClubsInfo", "ManageClubsInfo", new {id = "ID", announcementType = "Clubs" })'.replace("ID", parseInt(id));
+    };
+
+    function ShowOrHide(clubId) {
+        var isChecked = $('#checkbox-' + clubId).is(':checked');
+        if (isChecked) {
+            $(".club_" + clubId).show();
+        }
+        else {
+            $(".club_" + clubId).hide();
+        }
+    }
+</script>

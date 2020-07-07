@@ -1,0 +1,73 @@
+﻿@using Ti_Fate.Core.DomainModel
+@using Ti_Fate.Extensions
+@model Ti_Fate.ViewModels.UploadPictureViewModel
+@{
+    ViewData["Title"] = "UploadPicture";
+    var loginSession = Context.Session.GetObject<LoginSession>("LoginSession");
+
+}
+
+
+<!--  Croppie Plugin    -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.min.css.map">
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 ml-auto mr-auto">
+            <div class="card card-user">
+                <div class="card-body">
+                    <div class="author">
+                        <div class="block block-one"></div>
+                        <div class="block block-two"></div>
+                        <div class="block block-three"></div>
+                        <div class="block block-four"></div>
+                        @for (int i = 0; i < Model.PictureList.Count; i++)
+                        {
+                            @if (Model.PictureList.Count > 1)
+                            {
+                                <div>
+                                    <a href="@Url.Action("RemovePicture","UploadPicture",new{pictureIndex = i})" class="btn btn-danger btn-sm btn-round btn-icon" style="margin-left: 15%;margin-bottom:-2%"><i class="tim-icons icon-simple-remove"></i></a>
+                                </div>
+                            }
+                                <img class="avatar" src="@Url.Content(Model.PictureList[i])" alt="MyProfilePicture" />}
+
+                        
+                    </div>
+                    @if (Model.PictureList.Count < Model.NumOfPicture)
+                    {
+                        <div  id="img-crop">
+                            <div class="card-description col-sm-auto" id="upload">
+                                <h3>上傳照片</h3>
+                                <label class="btn btn-success btn-icon btn-round animation-on-hover" id="filedrag">
+                                    <i class="tim-icons icon-simple-add"></i>
+                                    <input type="file" id="fileselect" name="fileselect" accept="image/*" hidden="" onchange="disabled_cropie()" />
+                                </label>
+                                <label for="fileselect">上傳照片</label>
+                            </div>
+                            <form asp-controller="UploadPicture" asp-action="UploadPicture" method="post" class="form" enctype="multipart/form-data">
+                                <input asp-for="ProfileId" hidden="" />
+                                <input asp-for="NewBase64Picture" id="NewBase64Picture" hidden="" />
+                                <div class="card-description col-sm-auto" id="crop">
+                                    <h3>剪裁照片</h3>
+                                    <div id="croppie"></div>
+                                    <button class="btn btn-success animation-on-hover" id="next" onclick="cropResult()" disabled>確認剪裁</button>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                    <div align="center">
+                        <a class="btn btn-success animation-on-hover" href="@Url.Action("Profile","Profile",new {profileId = loginSession.ProfileId})">
+                            回上一頁
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.min.js"></script>
+<script src="~/js/plugins/croppie.js" type="text/javascript"></script>

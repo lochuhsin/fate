@@ -1,0 +1,27 @@
+﻿@model Ti_Fate.ViewModels.ManageJobsViewModel
+@{
+    ViewData["Title"] = "ManageJobs";
+}
+
+<h2>ManageJobs</h2>
+<table>
+    <thead>
+        <tr>
+            <td>排程名稱</td>
+            <td>Trigger</td>
+            <td>最後執行時間</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var jobInfo in Model.JobsInfoList)
+        {
+            <tr>
+                <td>@jobInfo.JobName</td>
+                <td>@jobInfo.CronTrigger</td>
+                <td>@jobInfo.LastExecute</td>
+                <td><a href="@Url.Action("ExecuteJob","ManageJobs",new {jobName = jobInfo.JobName})" class="title text-primary">Execute</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -1,0 +1,365 @@
+﻿@using Ti_Fate.Core.DomainModel
+@using Ti_Fate.Extensions
+@using Newtonsoft.Json
+@using System.Text.Encodings.Web
+@inject JavaScriptEncoder Encoder
+
+@model Ti_Fate.ViewModels.HomeViewModel
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css" />
+@{
+    var loginSession = Context.Session.GetObject<LoginSession>("LoginSession");
+}
+<div id="app">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card" style="height: 200px">
+                <div class="card-header ">
+                    <div class="row">
+                        <div class="col-sm-6 text-left">
+                            <h3 class="card-title">
+                                <i :class="important.icon"></i>
+                                {{important.title}}
+                            </h3>
+                            <h5 class="card-category">{{important.eng_title}}</h5>
+                        </div>
+                        <div class="col-sm-6">
+                            <div v-if="important.permission" class="btn-group btn-group-toggle float-right">
+                                <label class="btn btn-info btn-link" data-toggle="modal" data-target="#editImportant">
+                                    <i class="tim-icons icon-pencil"></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body text-center">
+                    <h1 class="text-danger font-weight-bolder">{{important.content}}</h1>
+                </div>
+                <!-- Modal For Edit Important Notice -->
+                <div class="modal fade" id="editImportant" tabindex="-1" role="dialog" aria-labelledby="editImportantLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title header-title font-weight-bolder" id="editImportantLabel">編輯重要公告內容</h2>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    <i class="tim-icons icon-simple-remove font-weight-bolder"></i>
+                                </button>
+                            </div>
+                            <form asp-controller="Home" asp-action="Important" method="post" enctype="multipart/form-data">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="inputImportant">重要公告輸入</label>
+                                        <input class="form-control text-darker" id="inputImportant" aria-describedby="importantHelp" asp-for="ImportantContent" value="@Model.ImportantContent" placeholder="請輸入重要公告內容...">
+                                        <small id="importantHelp" class="form-text text-muted">此重要公告將會即時更新主頁之公告內容，直到被再次更改</small>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary animation-on-hover" data-dismiss="modal">取消編輯</button>
+                                    <button type="submit" id="update-important" onclick="constraintLength()" class="btn btn-success animation-on-hover">更新公告</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div v-for="card in upper_card" class="col-sm-6 d-flex align-content-stretch flex-wrap">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-sm-10 text-left">
+                                    <h3 class="card-title">
+                                        <i :class="card.icon"></i>
+                                        {{card.title}}
+                                    </h3>
+                                    <h5 class="card-category">{{card.eng_title}}</h5>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div v-if="card.permission" class="btn-group btn-group-toggle float-right">
+                                        <a v-on:click="toPage(card.add_url)" class="btn btn-link card-link text-primary">
+                                            <i class="tim-icons icon-simple-add"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" v-on:click="toPage(card.url)">
+                            <p v-for="announcement in card.content">{{announcement}}</p>
+                        </div>
+                        <div class="card-footer text-right" v-on:click="toPage(card.url)"><a class="btn btn-link card-link text-primary">read more</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4" v-for="fater in fate">
+            <a v-on:click="toFaterProfile(fater.content.Id)" href="#">
+                <div class="card" style="height: 94%;">
+                    <div class="card-header">
+                        <h3 class="card-title"><i :class="fater.icon"></i>{{fater.title}}</h3>
+                        <h5 class="card-category">{{fater.eng_title}}</h5>
+                        <div class="col-md-12 text-center">
+                            <img class="avatar" style="min-height: 150px; min-width: 150px;" v-bind:src="fater.content.FirstPicture|srcEditor" alt="fater照片">
+                            <hr>
+                            <span v-bind:class="locationType(fater.content.Location)">{{fater.content.Location}}</span>
+                            <h4 class="title">{{fater.content.Name}}</h4>
+                            <h6>{{fater.content.Position}}／{{fater.content.Department}}／{{fater.content.TeamName}}</h6>
+                            <h5>{{fater.content.Introduce}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row" v-for="slider in slick_card">
+        <div class="col-12">
+            <div class="card card-plain">
+                <a class="card-header " href="#" v-on:click="toPage(slider.url)">
+                    <div class="row">
+                        <div class="col-sm-6 text-left">
+                            <h3 class="card-title "><i :class="slider.icon"></i> {{slider.title}}</h3>
+                            <h5 class="card-category">{{slider.eng_title}}</h5>
+                        </div>
+                    </div>
+                </a>
+                <div class="card-body">
+                    <div class="slider">
+                        <a href="#" v-for="fater in slider.content" v-on:click="toFaterProfile(fater.Id)">
+                            <div class="slide card card-body" v-bind:style="{ borderColor: slider.color , borderStyle: 'solid', borderWidth: '2px' }">
+                                <div class="col-lg-12">
+                                    <div>
+                                        <img class="avatar" style="width: 100%; height: 100%;" :src="fater.FirstPicture|srcEditor" alt="fater照片">
+                                    </div>
+                                    <hr>
+                                    <span :class="locationType(fater.Location)">{{fater.Location}}</span>
+                                    <hr>
+                                    <h4>{{fater.Name}}</h4>
+                                    <hr>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 d-flex align-content-stretch flex-wrap" onclick="location.href = '@Url.Action("ClubsInfo", "ClubsInfo")'">
+            <div class="card  ">
+                <div class="card-header ">
+                    <div class="row">
+                        <div class="col-sm-10 text-left">
+                            <h3 class="card-title">
+                                <i class="tim-icons icon-planet text-success"></i>
+                                社團資訊
+                            </h3>
+                            <h5 class="card-category">Club Information</h5>
+                        </div>
+                        <div class="col-sm-2">
+                            @if (loginSession.AccountPermission.ModifyClubs)
+                            {
+                                <div class="btn-group btn-group-toggle float-right">
+                                    <a asp-controller="ManageClubsInfo" asp-action="AddClubsInfo" asp-route-announcementType="Clubs" class="btn btn-link card-link text-primary">
+                                        <i class="tim-icons icon-simple-add"></i>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" style="min-height: 180px">
+                    @foreach (var clubsInfo in Model.ClubsInfoList)
+                    {
+                        <p>@clubsInfo</p>
+                    }
+                </div>
+                <div class="card-footer text-right"><a class="btn btn-link card-link text-primary">read more</a></div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 d-flex align-content-stretch flex-wrap" onclick="location.href = '@Url.Action("ExternalInfo", "ExternalInfo")'">
+            <div class="card">
+                <div class="card-header ">
+                    <div class="row">
+                        <div class="col-sm-10 text-left">
+                            <h3 class="card-title">
+                                <i class="tim-icons icon-world text-warning"></i>
+                                外部研討
+                            </h3>
+                            <h5 class="card-category">External Course</h5>
+                        </div>
+                        <div class="col-sm-2">
+                            @if (loginSession.AccountPermission.ModifyExternal)
+                            {
+                                <div class="btn-group btn-group-toggle float-right">
+                                    <a asp-controller="ManageExternalInfo" asp-action="AddExternalInfo" asp-route-announcementType="External" class="btn btn-link card-link text-primary">
+                                        <i class="tim-icons icon-simple-add"></i>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" style="min-height: 180px">
+                    @foreach (var externalInfo in Model.ExternalInfoList)
+                    {
+                        <p>@externalInfo</p>
+                    }
+                </div>
+                <div class="card-footer text-right"><a class="btn btn-link card-link text-primary">read more</a></div>
+            </div>
+        </div>
+        <div class="col-lg-4 d-flex align-content-stretch flex-wrap" onclick="location.href = '@Url.Action("ComingSoon", "Home")'">
+            <div class="card  ">
+                <div class="card-header ">
+                    <div class="row">
+                        <div class="col-sm-10 text-left">
+                            <h3 class="card-title">
+                                <i class="tim-icons icon-basket-simple text-danger"></i>
+                                特約商店公告
+                            </h3>
+                            <h5 class="card-category">Authorized Store</h5>
+                        </div>
+                        <div class="col-sm-2">
+                            @if (loginSession.AccountPermission.ModifyWelfare)
+                            {
+                                <div class="btn-group btn-group-toggle float-right">
+                                    <a asp-controller="Home" asp-action="ComingSoon" asp-route-announcementType="AuthorizedStore" class="btn btn-link card-link text-primary">
+                                        <i class="tim-icons icon-simple-add"></i>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" style="min-height: 180px">
+
+                </div>
+                <div class="card-footer text-right"><a class="btn btn-link card-link text-primary">read more</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.js"></script>
+<script>
+    var upper_card = [
+        {
+            title: '福委公告',
+            eng_title:'Welfare',
+            icon: 'tim-icons icon-pin text-success',
+            add_url: '@Url.Action("AddWelfare", "ManageWelfare",new{ announcementType = "Welfare"})',
+            url: '@Url.Action("Welfare", "Welfare")',
+            permission: @Html.Raw(JsonConvert.SerializeObject(loginSession.AccountPermission.ModifyWelfare)),
+            content:@Html.Raw(JsonConvert.SerializeObject(Model.WelfareTitleList))
+        }, {
+            title: 'Meet Up',
+            eng_title: 'Meet Up',
+            icon: 'tim-icons icon-atom text-warning',
+            add_url: '@Url.Action("AddMeetUp", "ManageMeetUp",new{ announcementType = "MeetUp"})',
+            url: '@Url.Action("MeetUpInfo","MeetUpInfo")',
+            permission: @Html.Raw(JsonConvert.SerializeObject(loginSession.AccountPermission.ModifyMeetUp)),
+            content: @Html.Raw(JsonConvert.SerializeObject(Model.MeetUpTitleList))
+        }
+    ];
+    var fate = [
+        {
+            title: ' 今日有緣人',
+            eng_title: "Today's Fater",
+            icon: 'tim-icons icon-heart-2 text-danger',
+            url: '@Url.Action("ComingSoon","Home")',
+            permission: @Html.Raw(JsonConvert.SerializeObject(loginSession.AccountPermission.ModifyMeetUp)),
+            content:@Html.Raw(JsonConvert.SerializeObject(Model.TodayFater))
+        }
+    ];
+    var slick_card = [
+        {
+            title: '新人介紹',
+            eng_title: "New Coming",
+            icon: 'tim-icons icon-shape-star text-primary',
+            url: '@Url.Action("NewComing", "NewComing")',
+            content:@Html.Raw(JsonConvert.SerializeObject(Model.NewFater)),
+            color:'#1dc2cc'
+        },
+        {
+            title: '本月壽星',
+            eng_title: "Happy Birthday !",
+            icon: 'tim-icons icon-gift-2 text-warning',
+            url: '@Url.Action("Birthday", "Birthday")',
+            content:@Html.Raw(JsonConvert.SerializeObject(Model.Birthday)),
+            color:'#e17b61'
+        }
+    ];
+    var app = new Vue({
+        el: '#app',
+        data: {
+            important:{
+                title: '重要公告',
+                eng_title:'Important',
+                icon:'tim-icons icon-bell-55 text-danger',
+                permission: @Html.Raw(JsonConvert.SerializeObject(loginSession.AccountPermission.ModifyImportant)),
+                content:@Html.Raw(JsonConvert.SerializeObject(Model.ImportantContent))
+            },
+            upper_card: upper_card,
+            fate: fate,
+            slick_card: slick_card
+        },
+        methods: {
+            toPage: function (url) {
+                window.location.href = url;
+            },
+            toFaterProfile: function (id) {
+                window.location.href = '@Url.Action("Profile", "Profile", new {profileId = "ID"})'.replace("ID", parseInt(id));
+            },
+            locationType: function (type) {
+                if (type === "臺中") {
+                    return 'badge badge-pill badge-success';
+                } else {
+                    return 'badge badge-pill badge-info';
+                }
+            }
+        },
+        filters: {
+            srcEditor: function (value) {
+                return value.toString().replace("~", "");
+            }
+        }
+    });
+
+    $('.slider').slick({
+        infinite: false,
+        autoplay: false,
+        slidesToShow: 5,
+        slidesToScroll: 3,
+        rows: 0,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    infinite: true
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    infinite: true
+                }
+            }
+        ]
+    });
+
+    function constraintLength() {
+        if ($("#inputImportant").val().length > 50) {
+            alert("請輸入小於50個字!!!");
+        }
+    }
+</script>
