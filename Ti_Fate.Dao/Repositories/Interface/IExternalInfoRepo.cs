@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Ti_Fate.Dao.Model;
 
 namespace Ti_Fate.Dao.Repositories.Interface
 {
     public interface IExternalInfoRepo
     {
-        Task<ExternalInfo> GetExternalInfoById(int id);
-        Task<List<ExternalInfo>> GetAllExternalInfo();
-        Task<List<ExternalInfo>> GetExternalInfosByTitle(string searchString);
-        Task AddExternalInfo(ExternalInfo externalInfo);
-        Task UpdateExternalInfo(ExternalInfo newExternalInfo);
-        Task DeleteExternalInfo(int id);
+        ExternalInfo GetExternalInfoById(int id);
+        List<ExternalInfo> GetAllExternalInfo();
+        List<ExternalInfo> GetExternalInfosByTitle(string searchString);
+        void AddExternalInfo(ExternalInfo externalInfo);
+        void UpdateExternalInfo(ExternalInfo newExternalInfo);
+        void DeleteExternalInfo(int id);
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Ti_Fate.Dao.Model;
 using Ti_Fate.Dao.Repositories.DBContext;
 using Ti_Fate.Dao.Repositories.Interface;
@@ -16,15 +14,15 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             _tiFateDbContext = tiFateDbContext;
         }
 
-        public async Task AddImportant(Important newImportant)
+        public void AddImportant(Important newImportant)
         {
             _tiFateDbContext.Important.Add(newImportant);
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task<Important> GetLastImportant()
+        public Important GetLastImportant()
         {
-            return await _tiFateDbContext.Important.OrderByDescending(p => p.Id).FirstOrDefaultAsync();
+            return _tiFateDbContext.Important.OrderByDescending(p => p.Id).FirstOrDefault();
         }
     }
 }

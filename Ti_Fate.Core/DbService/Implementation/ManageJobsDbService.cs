@@ -23,7 +23,7 @@ namespace Ti_Fate.Core.DbService.Implementation
         public List<JobsInfoDomainModel> GetAllJobsInfos()
         {
             var jobsInfoDomainModelList = new List<JobsInfoDomainModel>();
-            foreach (var jobsInfo in _jobsInfoRepo.GetAllJobsInfos().Result)
+            foreach (var jobsInfo in _jobsInfoRepo.GetAllJobsInfos())
             {
                 jobsInfoDomainModelList.Add(new JobsInfoDomainModel(jobsInfo));
             }

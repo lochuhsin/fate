@@ -2,6 +2,7 @@
 @using Ti_Fate.Extensions
 @using Newtonsoft.Json
 @using System.Text.Encodings.Web
+@using Ti_Fate.Core.Service
 @inject JavaScriptEncoder Encoder
 
 @model Ti_Fate.ViewModels.HomeViewModel
@@ -154,7 +155,7 @@
                             <h5 class="card-category">Club Information</h5>
                         </div>
                         <div class="col-sm-2">
-                            @if (loginSession.AccountPermission.ModifyClubs)
+                            @if (PermissionsService.IsClubsInfo(loginSession.Permission))
                             {
                                 <div class="btn-group btn-group-toggle float-right">
                                     <a asp-controller="ManageClubsInfo" asp-action="AddClubsInfo" asp-route-announcementType="Clubs" class="btn btn-link card-link text-primary">
@@ -187,7 +188,7 @@
                             <h5 class="card-category">External Course</h5>
                         </div>
                         <div class="col-sm-2">
-                            @if (loginSession.AccountPermission.ModifyExternal)
+                            @if (PermissionsService.IsExternal(loginSession.Permission))
                             {
                                 <div class="btn-group btn-group-toggle float-right">
                                     <a asp-controller="ManageExternalInfo" asp-action="AddExternalInfo" asp-route-announcementType="External" class="btn btn-link card-link text-primary">
@@ -219,7 +220,7 @@
                             <h5 class="card-category">Authorized Store</h5>
                         </div>
                         <div class="col-sm-2">
-                            @if (loginSession.AccountPermission.ModifyWelfare)
+                            @if (PermissionsService.IsWelfare(loginSession.Permission))
                             {
                                 <div class="btn-group btn-group-toggle float-right">
                                     <a asp-controller="Home" asp-action="ComingSoon" asp-route-announcementType="AuthorizedStore" class="btn btn-link card-link text-primary">
@@ -247,7 +248,7 @@
             icon: 'tim-icons icon-pin text-success',
             add_url: '@Url.Action("AddWelfare", "ManageWelfare",new{ announcementType = "Welfare"})',
             url: '@Url.Action("Welfare", "Welfare")',
-            permission: @Html.Raw(JsonConvert.SerializeObject(loginSession.AccountPermission.ModifyWelfare)),
+            permission: @Html.Raw(JsonConvert.SerializeObject(PermissionsService.IsWelfare(loginSession.Permission))),
             content:@Html.Raw(JsonConvert.SerializeObject(Model.WelfareTitleList))
         }, {
             title: 'Meet Up',
@@ -255,7 +256,7 @@
             icon: 'tim-icons icon-atom text-warning',
             add_url: '@Url.Action("AddMeetUp", "ManageMeetUp",new{ announcementType = "MeetUp"})',
             url: '@Url.Action("MeetUpInfo","MeetUpInfo")',
-            permission: @Html.Raw(JsonConvert.SerializeObject(loginSession.AccountPermission.ModifyMeetUp)),
+            permission: @Html.Raw(JsonConvert.SerializeObject(PermissionsService.IsMeetUp(loginSession.Permission))),
             content: @Html.Raw(JsonConvert.SerializeObject(Model.MeetUpTitleList))
         }
     ];
@@ -265,7 +266,6 @@
             eng_title: "Today's Fater",
             icon: 'tim-icons icon-heart-2 text-danger',
             url: '@Url.Action("ComingSoon","Home")',
-            permission: @Html.Raw(JsonConvert.SerializeObject(loginSession.AccountPermission.ModifyMeetUp)),
             content:@Html.Raw(JsonConvert.SerializeObject(Model.TodayFater))
         }
     ];
@@ -294,7 +294,7 @@
                 title: '重要公告',
                 eng_title:'Important',
                 icon:'tim-icons icon-bell-55 text-danger',
-                permission: @Html.Raw(JsonConvert.SerializeObject(loginSession.AccountPermission.ModifyImportant)),
+                permission: @Html.Raw(JsonConvert.SerializeObject(PermissionsService.IsImportant(loginSession.Permission))),
                 content:@Html.Raw(JsonConvert.SerializeObject(Model.ImportantContent))
             },
             upper_card: upper_card,

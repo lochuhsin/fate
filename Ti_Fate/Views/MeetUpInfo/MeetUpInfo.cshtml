@@ -1,5 +1,6 @@
 ﻿@using Ti_Fate.Extensions
 @using Ti_Fate.Core.DomainModel
+@using Ti_Fate.Core.Service
 @model Ti_Fate.ViewModels.MeetUpViewModel
 
 @{
@@ -10,7 +11,7 @@
     <label class="btn-lg btn-success btn-round animation-on-hover">
         <i class="tim-icons icon-pin" style="margin-bottom: 5%; margin-right: 10px"></i>Meet Up
     </label>
-    @if (loginSession.AccountPermission.ModifyWelfare)
+    @if (PermissionsService.IsMeetUp(loginSession.Permission))
     {
         <div class="ml-auto">
             <a asp-controller="ManageMeetUp" asp-action="AddMeetUp" asp-route-announcementType="MeetUp" class="btn btn-info btn-simple">
@@ -32,7 +33,7 @@
                         <i class="tim-icons icon-pin"></i>
                         @meetUp.Title
                     </h3>
-                    @if (loginSession.AccountPermission.ModifyWelfare)
+                    @if (PermissionsService.IsMeetUp(loginSession.Permission))
                     {
                         <div class="flex-column-reverse">
                             <label onclick="location.href = '@Url.Action("EditMeetUp", "ManageMeetUp", new {id = meetUp.Id, announcementType = "MeetUp"})'" class="btn btn-info btn-simple btn-icon btn-round">

@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\lib\NewFolder\**" />
+    <Content Remove="wwwroot\lib\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\lib\NewFolder\**" />
+    <None Remove="wwwroot\lib\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\UploadFile\20200604125553364.jpeg" />
     <Content Remove="wwwroot\UploadFile\20200604135558000.jpeg" />
     <Content Remove="wwwroot\UploadFile\20200604142725487.jpeg" />

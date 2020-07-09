@@ -20,7 +20,7 @@
     [Drink] NVARCHAR(30) NULL, 
     [Relationship] NVARCHAR(30) NULL, 
     [Country] NCHAR(30) NULL, 
-    [PermissionId] INT NULL, 
+    [Permission] INT NULL, 
     [FaterId] INT NULL, 
     [OnBoardDate] DATETIME NULL, 
     [Location] NVARCHAR(30) NULL

@@ -22,14 +22,14 @@ namespace Ti_Fate.Controllers
             _convertContextService = convertContextService;
         }
 
-        [ValidatePermission]
+        [ValidateAnnouncementPermission]
         public IActionResult AddWelfare(string announcementType)
         {
             HttpContext.Session.Remove("WelfareId");
             return View("ManageWelfare", new ManageWelfareViewModel());
         }
 
-        [ValidatePermission]
+        [ValidateAnnouncementPermission]
         public IActionResult EditWelfare(string announcementType, int id)
         {
             HttpContext.Session.SetInt32("WelfareId", id);
@@ -40,7 +40,7 @@ namespace Ti_Fate.Controllers
         [HttpPost]
         public IActionResult ManageWelfare(ManageWelfareViewModel manageWelfare)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid||!EndTimeIsValid(manageWelfare))
             {
                 return View(nameof(manageWelfare), manageWelfare);
             }
@@ -60,11 +60,21 @@ namespace Ti_Fate.Controllers
             return RedirectToAction("Welfare", "Welfare");
         }
 
-        [ValidatePermission]
+        [ValidateAnnouncementPermission]
         public IActionResult DeleteWelfare(string announcementType, int id)
         {
             _welfareDbService.DeleteWelfare(id);
             return RedirectToAction("Welfare", "Welfare");
+        }
+
+        private bool EndTimeIsValid(ManageWelfareViewModel manageWelfare)
+        {
+            if (manageWelfare.EndTime < manageWelfare.StartTime)
+            {
+                ModelState.AddModelError(nameof(manageWelfare.EndTime), "活動結束時間不可小於開始時間");
+                return false;
+            }
+            return true;
         }
 
         private int GetIdFromSessionAndRemove()

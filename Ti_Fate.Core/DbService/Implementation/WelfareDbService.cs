@@ -17,25 +17,19 @@ namespace Ti_Fate.Core.DbService.Implementation
 
         public WelfareDomainModel GetWelfareById(int id)
         {
-            return new WelfareDomainModel(_welfareRepo.GetWelfareById(id).Result);
+            return new WelfareDomainModel(_welfareRepo.GetWelfareById(id));
         }
 
         public List<WelfareDomainModel> GetWelfareByTitle(string searchTitle)
         {
-            var welfareList = _welfareRepo.GetWelfareByTitle(searchTitle).Result;
+            var welfareList = _welfareRepo.GetWelfareByTitle(searchTitle);
             return welfareList.Select(w => new WelfareDomainModel(w)).ToList();
         }
 
         public List<WelfareDomainModel> GetWelfareDomainModel()
         {
-            var welfareModels = _welfareRepo.GetAllWelfare().Result;
-            var welfareDomainModels = new List<WelfareDomainModel>();
-
-            foreach (var welfare in welfareModels)
-            {
-                var domainModel = new WelfareDomainModel(welfare);
-                welfareDomainModels.Add(domainModel);
-            }
+            var welfareModels = _welfareRepo.GetAllWelfare();
+            var welfareDomainModels = welfareModels.Select(w => new WelfareDomainModel()).ToList();
             return welfareDomainModels;
         }
 

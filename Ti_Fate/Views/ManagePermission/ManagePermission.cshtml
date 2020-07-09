@@ -1,0 +1,63 @@
+﻿@model List<Ti_Fate.ViewModels.PermissionViewModel>;
+@using Newtonsoft.Json
+<div class="card text-white mb-3" id="alert_list">
+    <div class="card-header">
+        <h4 class="card-title">管理權限</h4>
+    </div>
+    <div class="card-body">
+        <table id="ManagePermissions" class="table  table-striped table-hover table-dark " style="background-color: #27293D; color: white;"></table>
+    </div>
+</div>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+<script type="text/javascript">
+    var profilePermission = @(Html.Raw(JsonConvert.SerializeObject(Model)));
+    $("#ManagePermissions").DataTable({
+        data: profilePermission,
+        searching: true,
+        order: [[0, "desc"]],
+        columnDefs: [
+            { "className": "clickable dt-middle text-center", "targets": "_all" },
+        ],
+        columns: [
+            {
+                data: "Name", title: "名字"
+            }, {
+                data: "IsAdmin", title: "權限管理",
+                render: function (data) { return changeBool(data); }
+            },{
+                data: "IsImportant", title: "重要公告",
+                render: function (data) { return changeBool(data); }
+
+            }, {
+                data: "IsWelfare", title: "福委公告",
+                render: function (data) { return changeBool(data); }
+            }, {
+                data: "IsMeetUp", title: "Meet Up",
+                render: function (data) { return changeBool(data); }
+            }, {
+                data: "IsClubs", title: "社團公告",
+                render: function (data) { return changeBool(data); }
+            },
+            {
+                data: "IsExternal", title: "外部研討",
+                render: function (data) { return changeBool(data); }
+            },
+            {
+                data: null, title: "Edit",
+                render: function (data, type, row, meta) {
+                    return data = `<button  type="button" class="btn btn-Warning btn-sm" id="dt_pass" onclick = "linkToForm(${row.Id})">
+                                   Edit
+                         </button>`}
+            }
+        ]
+    });
+    function linkToForm(id) {
+        alert(id);
+    }
+    function changeBool(bool) {
+        if (bool === true) {
+            return 'V';
+        }
+        return 'X';
+    }
+</script>

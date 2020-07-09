@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Ti_Fate.Dao.Model;
 using Ti_Fate.Dao.Repositories.DBContext;
 using Ti_Fate.Dao.Repositories.Interface;
@@ -18,16 +16,16 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             _tiFateDbContext = tiFateDbContext;
         }
 
-        public async Task<List<JobsInfo>> GetAllJobsInfos()
+        public List<JobsInfo> GetAllJobsInfos()
         {
-            return await _tiFateDbContext.JobsInfo.OrderByDescending(m => m.JobName).ToListAsync();
+            return _tiFateDbContext.JobsInfo.OrderByDescending(m => m.JobName).ToList();
         }
 
-        public async Task UpdateLastExecuteTime(string jobName, DateTime lastTime)
+        public void UpdateLastExecuteTime(string jobName, DateTime lastTime)
         {
             var job = _tiFateDbContext.JobsInfo.Where(m => m.JobName == jobName).ToList();
             job[0].LastExecute = lastTime;
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
     }
 }

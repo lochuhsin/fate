@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Ti_Fate.Dao.Model;
 using Ti_Fate.Dao.Repositories.DBContext;
 using Ti_Fate.Dao.Repositories.Interface;
@@ -17,50 +15,50 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             _tiFateDbContext = tiFateDbContext;
         }
 
-        public async Task<ExternalInfo> GetExternalInfoById(int id)
+        public ExternalInfo GetExternalInfoById(int id)
         {
-            return await _tiFateDbContext.ExternalInfo.FindAsync(id);
+            return _tiFateDbContext.ExternalInfo.Find(id);
         }
 
-        public async Task<List<ExternalInfo>> GetAllExternalInfo()
+        public List<ExternalInfo> GetAllExternalInfo()
         {
             var externalInfos = _tiFateDbContext.ExternalInfo.Where(c => !c.IsDelete).OrderByDescending(c => c.Id);
-            return externalInfos.Any() ? await externalInfos.ToListAsync() : new List<ExternalInfo>();
+            return externalInfos.Any() ? externalInfos.ToList() : new List<ExternalInfo>();
         }
 
-        public async Task<List<ExternalInfo>> GetExternalInfosByTitle(string searchString)
+        public List<ExternalInfo> GetExternalInfosByTitle(string searchString)
         {
-            var externalInfos = _tiFateDbContext.ExternalInfo.Where(m => m.Title.Contains(searchString));
-            return externalInfos.Any() ? await externalInfos.ToListAsync() : new List<ExternalInfo>();
+            var externalInfos = _tiFateDbContext.ExternalInfo.Where(m => m.Title.Contains(searchString) && !m.IsDelete);
+            return externalInfos.Any() ? externalInfos.ToList() : new List<ExternalInfo>();
         }
 
-        public async Task AddExternalInfo(ExternalInfo externalInfo)
+        public void AddExternalInfo(ExternalInfo externalInfo)
         {
-            await _tiFateDbContext.ExternalInfo.AddAsync(externalInfo);
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.ExternalInfo.Add(externalInfo);
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task UpdateExternalInfo(ExternalInfo newExternalInfo)
+        public void UpdateExternalInfo(ExternalInfo newExternalInfo)
         {
-            var oldExternalInfo = await _tiFateDbContext.ExternalInfo.FindAsync(newExternalInfo.Id);
+            var oldExternalInfo = _tiFateDbContext.ExternalInfo.Find(newExternalInfo.Id);
             oldExternalInfo.Title = newExternalInfo.Title;
             oldExternalInfo.Content = newExternalInfo.Content;
             oldExternalInfo.StartTime = newExternalInfo.StartTime;
             oldExternalInfo.EndTime = newExternalInfo.EndTime;
 
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task DeleteExternalInfo(int id)
+        public void DeleteExternalInfo(int id)
         {
-            var deleteExternalInfo= await _tiFateDbContext.ExternalInfo.FindAsync(id);
+            var deleteExternalInfo = _tiFateDbContext.ExternalInfo.Find(id);
             if (deleteExternalInfo == null)
             {
                 return;
             }
 
             deleteExternalInfo.IsDelete = true;
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
     }
 }

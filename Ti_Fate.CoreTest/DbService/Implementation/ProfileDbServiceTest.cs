@@ -42,7 +42,7 @@ namespace Ti_Fate.CoreTest.DbService.Implementation
             Sport = "testSport",
             Others = "testOthers",
             Relationship = "testRelationship",
-            PermissionId = 1,
+            Permission = 1,
             FaterId = 4
         };
 

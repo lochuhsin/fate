@@ -10,7 +10,6 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 :r ..\Data\FakeProfile.sql
-:r ..\Data\FakePermission.sql
 :r ..\Data\FakeWelfare.sql
 :r ..\Data\FakeClubsInfo.sql
 :r ..\Data\FakeClubs.sql

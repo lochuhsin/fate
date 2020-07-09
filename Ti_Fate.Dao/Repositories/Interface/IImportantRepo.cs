@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Ti_Fate.Dao.Model;
+﻿using Ti_Fate.Dao.Model;
 
 namespace Ti_Fate.Dao.Repositories.Interface
 {
     public interface IImportantRepo
     {
-        Task AddImportant(Important newImportant);
-        Task<Important> GetLastImportant();
+        void AddImportant(Important newImportant);
+        Important GetLastImportant();
     }
 }

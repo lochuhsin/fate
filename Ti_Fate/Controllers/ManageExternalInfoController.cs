@@ -24,14 +24,14 @@ namespace Ti_Fate.Controllers
             _convertContextService = convertContextService;
         }
 
-        [ValidatePermission]
+        [ValidateAnnouncementPermission]
         public IActionResult AddExternalInfo(string announcementType)
         {
             HttpContext.Session.Remove("ExternalInfoId");
             return View("ManageExternalInfo", new ManageExternalInfoViewModel());
         }
 
-        [ValidatePermission]
+        [ValidateAnnouncementPermission]
         public IActionResult EditExternalInfo(string announcementType, int id)
         {
             HttpContext.Session.SetInt32("ExternalInfoId", id);
@@ -42,7 +42,7 @@ namespace Ti_Fate.Controllers
         [HttpPost]
         public IActionResult ManageExternal(ManageExternalInfoViewModel manageExternalInfo)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid||!EndTimeIsValid(manageExternalInfo))
             {
                 return View(nameof(manageExternalInfo), manageExternalInfo);
             }
@@ -62,12 +62,24 @@ namespace Ti_Fate.Controllers
             return RedirectToAction("ExternalInfo", "ExternalInfo");
         }
 
-        [ValidatePermission]
+        [ValidateAnnouncementPermission]
         public IActionResult DeleteExternalInfo(string announcementType, int id)
         {
             _externalDbService.DeleteExternal(id);
             return RedirectToAction("ExternalInfo", "ExternalInfo");
         }
+
+        private bool EndTimeIsValid(ManageExternalInfoViewModel manageExternalInfo)
+        {
+            if (manageExternalInfo.EndTime < manageExternalInfo.StartTime)
+            {
+                ModelState.AddModelError(nameof(manageExternalInfo.EndTime), "活動結束時間不可小於開始時間");
+                return false;
+            }
+
+            return true;
+        }
+
         private int GetIdFromSessionAndRemove()
         {
             var welfareId = HttpContext.Session.GetInt32("ExternalInfoId") ?? 0;

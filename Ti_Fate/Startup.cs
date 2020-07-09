@@ -59,7 +59,6 @@ namespace Ti_Fate
 
             services.AddTransient<IProfileDbService, ProfileDbService>();
             services.AddTransient<IWelfareDbService, WelfareDbService>();
-            services.AddTransient<IPermissionDbService, PermissionDbService>();
             services.AddTransient<IImportantDbService, ImportantDbService>();
             services.AddTransient<IManageJobsDbService, ManageJobsDbService>();
             services.AddTransient<IClubsInfoDbService, ClubsInfoDbService>();
@@ -71,7 +70,6 @@ namespace Ti_Fate
 
 
             services.AddTransient<IWelfareRepo, WelfareRepo>();
-            services.AddTransient<IPermissionRepo, PermissionRepo>();
             services.AddTransient<IProfileRepo, ProfileRepo>();
             services.AddTransient<IImportantRepo, ImportantRepo>();
             services.AddTransient<IJobsInfoRepo, JobsInfoRepo>();

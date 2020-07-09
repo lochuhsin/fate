@@ -33,9 +33,9 @@ namespace Ti_Fate.ViewModels
         }
 
         public HomeViewModel(ProfileDomainModel todayFaterDomainModel,
-            ImportantDomainModel importantDomainModel, IEnumerable<WelfareDomainModel> welfareEnumerable,
+            ImportantDomainModel importantDomainModel, List<WelfareDomainModel> welfareEnumerable,
             List<ClubsInfoDomainModel> clubsInfoList,
-            List<ProfileDomainModel> newFaterList, List<ProfileDomainModel> birthdayDomainModel,IEnumerable<MeetUpDomainModel> meetUpEnumerable, IEnumerable<ExternalInfoDomainModel> externalInfoEnumerable)
+            List<ProfileDomainModel> newFaterList, List<ProfileDomainModel> birthdayDomainModel, List<MeetUpDomainModel> meetUpEnumerable, List<ExternalInfoDomainModel> externalInfoEnumerable)
         {
             TodayFater = new BasicProfileModel(todayFaterDomainModel);
             ImportantContent = importantDomainModel.Content;
@@ -51,10 +51,10 @@ namespace Ti_Fate.ViewModels
             foreach (var clubsInfo in clubsInfoList)
             {
                 ClubsInfoList.Add(clubsInfo.Title);
-                if(clubsInfoList.Count >= NumOfList) break;
+                if (clubsInfoList.Count >= NumOfList) break;
             }
-            
-            MeetUpTitleList=new List<string>();
+
+            MeetUpTitleList = new List<string>();
             foreach (var meetUp in meetUpEnumerable)
             {
                 MeetUpTitleList.Add(meetUp.Title);

@@ -11,6 +11,7 @@ namespace Ti_Fate.Core.DbService.Interface
         List<ProfileDomainModel> GetProfileByName(string searchString);
         List<ProfileDomainModel> GetNewFater(int numOfMonths);
         List<ProfileDomainModel> GetBirthdayFaters();
+        List<ProfileDomainModel> GetAllProfileDomainModels();
         bool IsProfileExist(string account);
         void InsertProfile(ProfileDomainModel profileDomainModel);
         void UpdateProfile(ProfileDomainModel profileDomainModel);

@@ -5,12 +5,12 @@ namespace Ti_Fate.ViewModels
 {
     public class WelfareViewModel
     {
-        public WelfareViewModel(IEnumerable<WelfareDomainModel> domainModelList)
+        public WelfareViewModel(List<WelfareDomainModel> domainModelList)
         {
             DomainModelList = domainModelList;
         }
 
-        public IEnumerable<WelfareDomainModel> DomainModelList { get; set; }
+        public List<WelfareDomainModel> DomainModelList { get; set; }
 
     }
 }

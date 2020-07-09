@@ -18,18 +18,18 @@ namespace Ti_Fate.Core.DbService.Implementation
 
         public ClubsInfoDomainModel GetClubsInfoById(int id)
         {
-            return new ClubsInfoDomainModel(_clubsInfoRepo.GetClubsInfoById(id).Result);
+            return new ClubsInfoDomainModel(_clubsInfoRepo.GetClubsInfoById(id));
         }
 
         public List<ClubsInfoDomainModel> GetClubsInfoByTitle(string searchString)
         {
-            var clubsInfos = _clubsInfoRepo.GetClubsInfosByTitle(searchString).Result;
+            var clubsInfos = _clubsInfoRepo.GetClubsInfosByTitle(searchString);
             return clubsInfos.Select(c => new ClubsInfoDomainModel(c)).ToList();
         }
 
         public List<ClubsInfoDomainModel> GetClubsInfoDomainModelList()
         {
-            var clubsInfos = _clubsInfoRepo.GetAllClubsInfo().Result;
+            var clubsInfos = _clubsInfoRepo.GetAllClubsInfo();
             return clubsInfos.Select(c => new ClubsInfoDomainModel(c)).ToList();
         }
 

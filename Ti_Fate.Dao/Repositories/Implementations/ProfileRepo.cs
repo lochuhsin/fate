@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Ti_Fate.Dao.Model;
 using Ti_Fate.Dao.Repositories.DBContext;
 using Ti_Fate.Dao.Repositories.Interface;
@@ -17,46 +15,46 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             _tiFateDbContext = tiFateDbContext;
         }
 
-        public async Task<Profile> GetProfile(int id)
+        public Profile GetProfile(int id)
         {
-            return await _tiFateDbContext.Profile.FindAsync(id);
+            return _tiFateDbContext.Profile.Find(id);
         }
 
-        public async Task<Profile> GetProfileByAccount(string account)
+        public Profile GetProfileByAccount(string account)
         {
-            return await _tiFateDbContext.Profile.SingleOrDefaultAsync(x => x.Account == account);
+            return _tiFateDbContext.Profile.SingleOrDefault(x => x.Account == account);
         }
 
-        public async Task<List<Profile>> GetProfileByOnBoardDate(DateTime startTime, DateTime endTime)
+        public List<Profile> GetProfileByOnBoardDate(DateTime startTime, DateTime endTime)
         {
-            var profileByOnBoardDate = await _tiFateDbContext.Profile.Where(m => m.OnBoardDate >= endTime && m.OnBoardDate <= startTime).ToListAsync();
+            var profileByOnBoardDate = _tiFateDbContext.Profile.Where(m => m.OnBoardDate >= endTime && m.OnBoardDate <= startTime).ToList();
             return profileByOnBoardDate.OrderBy(m => m.Name).ToList();
         }
 
-        public async Task<List<Profile>> GetProfileByBirthday(int month)
+        public List<Profile> GetProfileByBirthday(int month)
         {
-            var profileByBirthday = await _tiFateDbContext.Profile.Where(m => m.Birth.Month == month).ToListAsync();
+            var profileByBirthday = _tiFateDbContext.Profile.Where(m => m.Birth.Month == month).OrderBy(m=>m.Birth).ToList();
             return profileByBirthday.OrderBy(m => m.Name).ToList();
         }
 
-        public async Task<List<Profile>> GetProfileByName(string searchString)
+        public List<Profile> GetProfileByName(string searchString)
         {
             var profiles = _tiFateDbContext.Profile.Where(w => w.Name.Contains(searchString));
-            return profiles.Any() ? await profiles.ToListAsync() : new List<Profile>();
+            return profiles.Any() ? profiles.ToList() : new List<Profile>();
         }
 
-        public async Task<List<Profile>> GetAllProfile()
+        public List<Profile> GetAllProfile()
         {
-            return await _tiFateDbContext.Set<Profile>().ToListAsync();
+            return _tiFateDbContext.Set<Profile>().ToList();
         }
 
-        public async Task InsertProfile(Profile profile)
+        public void InsertProfile(Profile profile)
         {
             _tiFateDbContext.Profile.Add(profile);
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task UpdateProfile(Profile newProfile)
+        public void UpdateProfile(Profile newProfile)
         {
             var oldProfile = _tiFateDbContext.Profile.Find(newProfile.Id);
 
@@ -69,7 +67,7 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             oldProfile.TeamName = newProfile.TeamName;
             oldProfile.Introduce = newProfile.Introduce;
 
-            oldProfile.Relationship = newProfile.Relationship; 
+            oldProfile.Relationship = newProfile.Relationship;
             oldProfile.Constellation = newProfile.Constellation;
             oldProfile.Skills = newProfile.Skills;
 
@@ -82,31 +80,31 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             oldProfile.Drink = newProfile.Drink;
             oldProfile.Others = newProfile.Others;
 
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task UpdateProfilePicturePath(Profile newProfile)
+        public void UpdateProfilePicturePath(Profile newProfile)
         {
             var oldProfile = _tiFateDbContext.Profile.Find(newProfile.Id);
             oldProfile.Picture = newProfile.Picture;
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task UpdateFaterId(List<int> faterIdList)
+        public void UpdateFaterId(List<int> faterIdList)
         {
             var allProfile = _tiFateDbContext.Set<Profile>().ToList();
             for (var i = 0; i < allProfile.Count; i++)
             {
                 allProfile[i].FaterId = faterIdList[i];
             }
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task UpdateFaterId(int profileId, int newFaterId)
+        public void UpdateFaterId(int profileId, int newFaterId)
         {
             var oldProfile = _tiFateDbContext.Profile.Find(profileId);
             oldProfile.FaterId = newFaterId;
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
     }
 }

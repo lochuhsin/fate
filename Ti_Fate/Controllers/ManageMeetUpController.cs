@@ -17,7 +17,7 @@ using Ti_Fate.ViewModels;
 
 namespace Ti_Fate.Controllers
 {
-    public class ManageMeetUpController:Controller
+    public class ManageMeetUpController : Controller
     {
         private readonly IMeetUpDbService _meetUpDbService;
         private readonly IConvertContextService _convertContextService;
@@ -28,17 +28,17 @@ namespace Ti_Fate.Controllers
             _convertContextService = convertContextService;
         }
 
-        [ValidatePermission]
+        [ValidateAnnouncementPermission]
         public IActionResult AddMeetUp(string announcementType)
         {
             HttpContext.Session.Remove("MeetUpId");
             return View(nameof(ManageMeetUp), new ManageMeetUpViewModel());
         }
 
-        [ValidatePermission]
+        [ValidateAnnouncementPermission]
         public IActionResult EditMeetUp(string announcementType, int id)
         {
-            HttpContext.Session.SetInt32("MeetUpId",id);
+            HttpContext.Session.SetInt32("MeetUpId", id);
             var meetUpDomainModel = _meetUpDbService.GetMeetUpById(id);
             return View(nameof(ManageMeetUp), new ManageMeetUpViewModel(meetUpDomainModel));
         }
@@ -46,7 +46,7 @@ namespace Ti_Fate.Controllers
         [HttpPost]
         public IActionResult ManageMeetUp(ManageMeetUpViewModel manageMeetUp)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || !EndTimeIsValid(manageMeetUp))
             {
                 return View(nameof(manageMeetUp), manageMeetUp);
             }
@@ -65,8 +65,18 @@ namespace Ti_Fate.Controllers
             return RedirectToAction("MeetUpInfo", "MeetUpInfo");
         }
 
-        [ValidatePermission]
-        public IActionResult DeleteMeetUp(string announcementType,int id)
+        private bool EndTimeIsValid(ManageMeetUpViewModel manageMeetUp)
+        {
+            if (manageMeetUp.EndTime < manageMeetUp.StartTime)
+            {
+                ModelState.AddModelError(nameof(manageMeetUp.EndTime), "活動結束時間不可小於開始時間");
+                return false;
+            }
+            return true;
+        }
+
+        [ValidateAnnouncementPermission]
+        public IActionResult DeleteMeetUp(string announcementType, int id)
         {
             _meetUpDbService.DeleteMeetUp(id);
             return RedirectToAction("MeetUpInfo", "MeetUpInfo");
@@ -74,7 +84,7 @@ namespace Ti_Fate.Controllers
         private int GetIdFromSessionAndRemove()
         {
             var meetUpId = HttpContext.Session.GetInt32("MeetUpId") ?? 0;
-            HttpContext.Session.Remove("MeetUpId"); 
+            HttpContext.Session.Remove("MeetUpId");
             return meetUpId;
         }
 
@@ -82,7 +92,7 @@ namespace Ti_Fate.Controllers
         {
             return new MeetUpDomainModel()
             {
-                Id=manageMeetUp.Id,
+                Id = manageMeetUp.Id,
                 Title = HttpUtility.HtmlEncode(manageMeetUp.Title),
                 PublishTime = manageMeetUp.PublishTime,
                 StartTime = manageMeetUp.StartTime,

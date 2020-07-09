@@ -31,7 +31,7 @@ namespace Ti_Fate.Core.DomainModel
         public string Drink { get; set; }
         public string Relationship { get; set; }
 
-        public int PermissionId { get; set; }
+        public int Permission { get; set; }
         public int FaterId { get; set; }
 
         public ProfileDomainModel()
@@ -66,7 +66,7 @@ namespace Ti_Fate.Core.DomainModel
             Drink = profile.Drink;
             Relationship = profile.Relationship;
 
-            PermissionId = profile.PermissionId;
+            Permission = profile.Permission;
             FaterId = profile.FaterId;
             Location = profile.Location;
         }

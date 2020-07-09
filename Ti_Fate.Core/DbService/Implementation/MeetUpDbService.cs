@@ -18,19 +18,19 @@ namespace Ti_Fate.Core.DbService.Implementation
 
         public MeetUpDomainModel GetMeetUpById(int id)
         {
-            return new MeetUpDomainModel(_meetUpRepo.GetMeetUpById(id).Result);
+            return new MeetUpDomainModel(_meetUpRepo.GetMeetUpById(id));
         }
 
         public List<MeetUpDomainModel> GetMeetUpDomainModel()
         {
-            var meetUpModels = _meetUpRepo.GetAllMeetUp().Result;
+            var meetUpModels = _meetUpRepo.GetAllMeetUp();
 
             return meetUpModels.Select(meetUp => new MeetUpDomainModel(meetUp)).ToList();
         }
 
         public List<MeetUpDomainModel> GetMeetUpByTitle(string title)
         {
-            var meetUpByTitle = _meetUpRepo.GetMeetUpByTitle(title).Result;
+            var meetUpByTitle = _meetUpRepo.GetMeetUpByTitle(title);
             return meetUpByTitle.Select(m => new MeetUpDomainModel(m)).ToList();
         }
 

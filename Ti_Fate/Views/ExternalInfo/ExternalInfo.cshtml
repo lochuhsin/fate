@@ -1,5 +1,6 @@
 ﻿@using Ti_Fate.Extensions
 @using Ti_Fate.Core.DomainModel
+@using Ti_Fate.Core.Service
 @model Ti_Fate.ViewModels.ExternalInfofViewModel
 
 @{
@@ -10,7 +11,7 @@
     <label class="btn-lg btn-success btn-round animation-on-hover">
         <i class="tim-icons icon-pin" style="margin-bottom: 5%; margin-right: 10px"></i>外部研討
     </label>
-    @if (loginSession.AccountPermission.ModifyExternal)
+    @if (PermissionsService.IsExternal(loginSession.Permission))
     {
         <div class="ml-auto">
             <a asp-controller="ManageExternalInfo" asp-action="AddExternalInfo" asp-route-announcementType="External" class="btn btn-info btn-simple">
@@ -32,7 +33,7 @@
                         <i class="tim-icons icon-pin"></i>
                         @externalInfo.Title
                     </h3>
-                    @if (loginSession.AccountPermission.ModifyExternal)
+                    @if (PermissionsService.IsExternal(loginSession.Permission))
                     {
                         <div class="flex-column-reverse">
                             <label onclick="location.href = '@Url.Action("EditExternalInfo", "ManageExternalInfo", new {id = externalInfo.Id, announcementType = "External"})'" class="btn btn-info btn-simple btn-icon btn-round">
@@ -86,14 +87,13 @@
 </div>
 
 <script>
-
     function GetId(Id) {
         $('#getId').val(Id);
     }
+
     function DeleteExternal() {
-        const id = $('#getId').val();
+        var id = $('#getId').val();
         window.location.href = '@Url.Action("DeleteExternalInfo", "ManageExternalInfo", new {id = "ID", announcementType = "External" })'
             .replace("ID", parseInt(id));
-
     };
 </script>

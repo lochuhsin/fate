@@ -5,12 +5,12 @@ namespace Ti_Fate.ViewModels
 {
     public class ExternalInfofViewModel
     {
-         public ExternalInfofViewModel(IEnumerable<ExternalInfoDomainModel> domainModelList)
+         public ExternalInfofViewModel(List<ExternalInfoDomainModel> domainModelList)
         {
             DomainModelList = domainModelList ;
         }
 
-        public IEnumerable<ExternalInfoDomainModel> DomainModelList { get; set; }
+        public List<ExternalInfoDomainModel> DomainModelList { get; set; }
 
     }
 }

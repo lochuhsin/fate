@@ -14813,6 +14813,7 @@ a.text-darker:focus {
 .open .form-control {
     border-radius: 0.4285rem 0.4285rem 0 0;
     border-bottom-color: transparent;
+    color: #797979;
 }
 
 .form-control + .input-group-append .input-group-text,

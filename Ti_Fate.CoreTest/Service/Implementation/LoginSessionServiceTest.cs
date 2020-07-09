@@ -9,16 +9,14 @@ namespace Ti_Fate.CoreTest.Service.Implementation
 {
     public class LoginSessionServiceTest
     {
-        private IPermissionDbService _permissionDbService;
         private IProfileDbService _profileDbService;
         private LoginSessionService _loginSessionService;
 
         [SetUp]
         public void SetUp()
         {
-            _permissionDbService = Substitute.For<IPermissionDbService>();
             _profileDbService = Substitute.For<IProfileDbService>();
-            _loginSessionService = new LoginSessionService(_permissionDbService, _profileDbService);
+            _loginSessionService = new LoginSessionService(_profileDbService);
         }
 
         [Test]
@@ -30,13 +28,8 @@ namespace Ti_Fate.CoreTest.Service.Implementation
                 Account = "Willy",
                 Picture = "a|b|c"
             });
-            _permissionDbService.GetPermissionById(Arg.Any<int>()).Returns(new PermissionDomainModel()
-            {
-                Id = 2
-            });
-
             var actual = _loginSessionService.GetLoginSessionByAccount("Willy");
-            var expected = new LoginSession(new ProfileDomainModel() { Id = 2, Account = "Willy" }, new PermissionDomainModel() { Id = 2 }, "a");
+            var expected = new LoginSession(new ProfileDomainModel() { Id = 2, Account = "Willy" }, "a");
             expected.Should().BeEquivalentTo(actual);
 
 

@@ -1,5 +1,6 @@
 ﻿@using Ti_Fate.Extensions
 @using Ti_Fate.Core.DomainModel
+@using Ti_Fate.Core.Service
 @model Ti_Fate.ViewModels.ClubsInfoViewModel
 
 @{
@@ -10,7 +11,7 @@
     <label class="btn-lg btn-success btn-round animation-on-hover">
         <i class="tim-icons icon-pin" style="margin-bottom: 5%; margin-right: 10px"></i>社團公告
     </label>
-    @if (loginSession.AccountPermission.ModifyClubs)
+    @if (PermissionsService.IsClubsInfo(loginSession.Permission))
     {
         <div class="ml-auto">
             <a asp-controller="ManageClubsInfo" asp-action="AddClubsInfo" asp-route-announcementType="Clubs" class="btn btn-info btn-simple">
@@ -48,7 +49,7 @@
                         <i class="tim-icons icon-pin"></i>
                         @clubsInfo.Title
                     </h3>
-                    @if (loginSession.AccountPermission.ModifyClubs)
+                    @if (PermissionsService.IsClubsInfo(loginSession.Permission))
                     {
                         <div class="flex-column-reverse">
                             <label onclick="location.href = '@Url.Action("EditClubsInfo", "ManageClubsInfo", new {id = clubsInfo.Id, announcementType = "Clubs"})'" class="btn btn-info btn-simple btn-icon btn-round">

@@ -18,18 +18,18 @@ namespace Ti_Fate.Core.DbService.Implementation
 
         public ExternalInfoDomainModel GetExternalById(int id)
         {
-            return new ExternalInfoDomainModel(_externalInfoRepo.GetExternalInfoById(id).Result);
+            return new ExternalInfoDomainModel(_externalInfoRepo.GetExternalInfoById(id));
         }
 
         public List<ExternalInfoDomainModel> GetMeetUpDomainModel()
         {
-            var externalInfoModels = _externalInfoRepo.GetAllExternalInfo().Result;
+            var externalInfoModels = _externalInfoRepo.GetAllExternalInfo();
             return externalInfoModels.Select(e => new ExternalInfoDomainModel(e)).ToList();
         }
 
         public List<ExternalInfoDomainModel> GetExternalInfosByTitle(string searchString)
         {
-            var externalInfosByTitle = _externalInfoRepo.GetExternalInfosByTitle(searchString).Result;
+            var externalInfosByTitle = _externalInfoRepo.GetExternalInfosByTitle(searchString);
             return externalInfosByTitle.Select(e => new ExternalInfoDomainModel(e)).ToList();
         }
 

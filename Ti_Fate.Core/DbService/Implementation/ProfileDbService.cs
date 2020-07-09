@@ -25,32 +25,39 @@ namespace Ti_Fate.Core.DbService.Implementation
 
         public ProfileDomainModel GetProfile(int id)
         {
-            var profile = _profileRepo.GetProfile(id).Result;
+            var profile = _profileRepo.GetProfile(id);
             return new ProfileDomainModel(profile);
         }
 
+        public List<ProfileDomainModel> GetAllProfileDomainModels()
+        {
+            var profileModel = _profileRepo.GetAllProfile();
+            var profileDomainModel = profileModel.Select(p => new ProfileDomainModel(p)).ToList();
+
+            return profileDomainModel;
+        }
         public ProfileDomainModel GetFaterById(int profileId)
         {
-            var faterId = _profileRepo.GetProfile(profileId).Result.FaterId;
-            var faterProfile = _profileRepo.GetProfile(faterId).Result;
+            var faterId = _profileRepo.GetProfile(profileId).FaterId;
+            var faterProfile = _profileRepo.GetProfile(faterId);
             if (faterProfile == null)
             {
                 var newFaterId = GetFaterId();
                 _profileRepo.UpdateFaterId(profileId, newFaterId);
-                faterProfile = _profileRepo.GetProfile(newFaterId).Result;
+                faterProfile = _profileRepo.GetProfile(newFaterId);
             }
             return new ProfileDomainModel(faterProfile);
         }
 
         public ProfileDomainModel GetProfileByAccount(string account)
         {
-            var profileByAccount = _profileRepo.GetProfileByAccount(account).Result;
+            var profileByAccount = _profileRepo.GetProfileByAccount(account);
             return new ProfileDomainModel(profileByAccount);
         }
 
         public List<ProfileDomainModel> GetProfileByName(string searchString)
         {
-            var profileByName = _profileRepo.GetProfileByName(searchString).Result;
+            var profileByName = _profileRepo.GetProfileByName(searchString);
             return profileByName.Select(profile => new ProfileDomainModel(profile)).ToList();
         }
 
@@ -58,20 +65,20 @@ namespace Ti_Fate.Core.DbService.Implementation
         {
             var startDate = GetNow();
             var endDate = new DateTime(startDate.Year, startDate.Month - 3 + 1, startDate.Day);
-            var profileByDate = _profileRepo.GetProfileByOnBoardDate(startDate, endDate).Result;
+            var profileByDate = _profileRepo.GetProfileByOnBoardDate(startDate, endDate);
 
             return profileByDate?.Select(profile => new ProfileDomainModel(profile)).ToList();
         }
 
         public List<ProfileDomainModel> GetBirthdayFaters()
         {
-            var profileList = _profileRepo.GetProfileByBirthday(GetNowMonth()).Result;
+            var profileList = _profileRepo.GetProfileByBirthday(GetNowMonth());
             return profileList?.Select(profile => new ProfileDomainModel(profile)).ToList();
         }
 
         public bool IsProfileExist(string account)
         {
-            var profile = _profileRepo.GetProfileByAccount(account).Result;
+            var profile = _profileRepo.GetProfileByAccount(account);
             if (profile == null) return false;
             return true;
         }
@@ -88,7 +95,7 @@ namespace Ti_Fate.Core.DbService.Implementation
                 TeamName = profileDomainModel.TeamName,
                 Introduce = profileDomainModel.Introduce,
                 Birth = profileDomainModel.Birth,
-                PermissionId = profileDomainModel.PermissionId,
+                Permission = profileDomainModel.Permission,
                 OnBoardDate = profileDomainModel.OnBoardDate,
                 FaterId = GetFaterId(),
                 Location = profileDomainModel.Location
@@ -98,7 +105,7 @@ namespace Ti_Fate.Core.DbService.Implementation
 
         private int GetFaterId()
         {
-            var allProfile = _profileRepo.GetAllProfile().Result;
+            var allProfile = _profileRepo.GetAllProfile();
             var profileCount = allProfile.Count() - 1;
 
             var random = new Random();
@@ -108,7 +115,7 @@ namespace Ti_Fate.Core.DbService.Implementation
 
         public void RandomFater()
         {
-            var profileIdList = _profileRepo.GetAllProfile().Result.Select(profile => profile.Id).ToList();
+            var profileIdList = _profileRepo.GetAllProfile().Select(profile => profile.Id).ToList();
             ShuffleTool.ShuffleList(profileIdList);
             _profileRepo.UpdateFaterId(profileIdList);
         }
@@ -153,7 +160,7 @@ namespace Ti_Fate.Core.DbService.Implementation
 
         public void RemoveProfilePicture(int id, int pictureIndex)
         {
-            var profile = _profileRepo.GetProfile(id).Result;
+            var profile = _profileRepo.GetProfile(id);
             var pictureList = profile.Picture.Split('|').ToList();
 
             RemoveFile(pictureList[pictureIndex]);
@@ -184,7 +191,7 @@ namespace Ti_Fate.Core.DbService.Implementation
 
         private void UpdateProfilePicture(int id, PictureInfo picInfo)
         {
-            var profile = _profileRepo.GetProfile(id).Result;
+            var profile = _profileRepo.GetProfile(id);
             profile.Picture = profile.Picture + "|" + picInfo.PicPath;
             _profileRepo.UpdateProfilePicturePath(profile);
         }

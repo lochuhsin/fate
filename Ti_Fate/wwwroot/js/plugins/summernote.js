@@ -19,3 +19,22 @@
         ["insert", ["link", "picture"]]
     ]
 });
+
+var body = '<div class="form-group note-form-group">' +
+    '<div class="help-block note-help-block">Helpful text block</div>' +
+    '</div>' +
+    '<div class="form-group note-form-group">' +
+    '<label for="note-input-1" class="control-label note-form-label">Input Label 1</label>' +
+    '<div class="input-group note-input-group">' +
+    '<input type="text" id="note-input-1" class="form-contro note-input">' +
+    '</div>' +
+    '</div>';
+
+
+$('.note-image-dialog, .note-link-dialog, .note-video-dialog, .note-help-dialog').on('show.bs.modal', function () {
+    $(this).detach().appendTo('body');
+});
+
+$('.note-image-dialog, .note-link-dialog, .note-video-dialog, .note-help-dialog').on('hide.bs.modal', function () {
+    $(this).detach().appendTo('.note-dialog');
+});

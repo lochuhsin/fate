@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Ti_Fate.Dao.Model;
 using Ti_Fate.Dao.Repositories.DBContext;
 using Ti_Fate.Dao.Repositories.Interface;
@@ -17,30 +15,31 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             _tiFateDbContext = tiFateDbContext;
         }
 
-        public async Task<ClubsInfo> GetClubsInfoById(int id)
+        public ClubsInfo GetClubsInfoById(int id)
         {
-            return await _tiFateDbContext.ClubsInfo.FindAsync(id);
+            return _tiFateDbContext.ClubsInfo.Find(id);
         }
 
-        public async Task<List<ClubsInfo>> GetClubsInfosByTitle(string searchString)
+        public List<ClubsInfo> GetClubsInfosByTitle(string searchString)
         {
-            var clubInfos = _tiFateDbContext.ClubsInfo.Where(clubs => clubs.Title.Contains(searchString) && !clubs.IsDelete);
-            return clubInfos.Any() ? await clubInfos.ToListAsync() : new List<ClubsInfo>();
+            var clubInfos = _tiFateDbContext.ClubsInfo.Where(clubs => clubs.Title.Contains(searchString) && !clubs.IsDelete).ToList();
+            return clubInfos.Any() ? clubInfos : new List<ClubsInfo>();
+
         }
 
-        public async Task<List<ClubsInfo>> GetAllClubsInfo()
+        public List<ClubsInfo> GetAllClubsInfo()
         {
             var clubsInfos = _tiFateDbContext.ClubsInfo.Where(c => !c.IsDelete).OrderByDescending(c => c.Id);
-            return clubsInfos.Any() ? await clubsInfos.ToListAsync() : new List<ClubsInfo>();
+            return clubsInfos.Any() ? clubsInfos.ToList() : new List<ClubsInfo>();
         }
 
-        public async Task AddClubsInfo(ClubsInfo clubsInfo)
+        public void AddClubsInfo(ClubsInfo clubsInfo)
         {
             _tiFateDbContext.ClubsInfo.Add(clubsInfo);
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task UpdateClubsInfo(ClubsInfo newClubsInfo)
+        public void UpdateClubsInfo(ClubsInfo newClubsInfo)
         {
             var oldClubsInfo = _tiFateDbContext.ClubsInfo.Find(newClubsInfo.Id);
 
@@ -50,10 +49,10 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             oldClubsInfo.StartTime = newClubsInfo.StartTime;
             oldClubsInfo.EndTime = newClubsInfo.EndTime;
 
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task DeleteClubsInfo(int id)
+        public void DeleteClubsInfo(int id)
         {
             var deleteClubsInfo = _tiFateDbContext.ClubsInfo.Find(id);
             if (deleteClubsInfo == null)
@@ -62,7 +61,7 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             }
 
             deleteClubsInfo.IsDelete = true;
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
     }
 }

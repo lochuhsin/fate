@@ -6,13 +6,13 @@ namespace Ti_Fate.ViewModels
 {
     public class ClubsInfoViewModel
     {
-        public ClubsInfoViewModel(IEnumerable<CombineClubInfosDomainModel> combineClubsInfoList, IEnumerable<ClubsDomainModel> clubsDomainModelList)
+        public ClubsInfoViewModel(List<CombineClubInfosDomainModel> combineClubsInfoList, List<ClubsDomainModel> clubsDomainModelList)
         {
             ClubsInfoList = combineClubsInfoList;
             ClubNameList = clubsDomainModelList;
         }
 
-        public IEnumerable<CombineClubInfosDomainModel> ClubsInfoList { get; set; }
-        public IEnumerable<ClubsDomainModel> ClubNameList { get; set; }
+        public List<CombineClubInfosDomainModel> ClubsInfoList { get; set; }
+        public List<ClubsDomainModel> ClubNameList { get; set; }
     }
 }

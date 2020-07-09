@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Ti_Fate.Dao.Model;
 using Ti_Fate.Dao.Repositories.DBContext;
 using Ti_Fate.Dao.Repositories.Interface;
@@ -16,30 +14,30 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             _tiFateDbContext = tiFateDbContext;
         }
 
-        public async Task<MeetUp> GetMeetUpById(int id)
+        public MeetUp GetMeetUpById(int id)
         {
-            return await _tiFateDbContext.MeetUp.FindAsync(id);
+            return _tiFateDbContext.MeetUp.Find(id);
         }
 
-        public async Task<List<MeetUp>> GetAllMeetUp()
+        public List<MeetUp> GetAllMeetUp()
         {
             var meetUp = _tiFateDbContext.MeetUp.Where(m => !m.IsDelete).OrderByDescending(m => m.Id);
-            return meetUp.Any() ? await meetUp.ToListAsync() : new List<MeetUp>();
+            return meetUp.Any() ? meetUp.ToList() : new List<MeetUp>();
         }
 
-        public async Task<List<MeetUp>> GetMeetUpByTitle(string title)
+        public List<MeetUp> GetMeetUpByTitle(string title)
         {
             var meetUps = _tiFateDbContext.MeetUp.Where(m => m.Title.Contains(title) && !m.IsDelete);
-            return meetUps.Any() ? await meetUps.ToListAsync() : new List<MeetUp>();
+            return meetUps.Any() ? meetUps.ToList() : new List<MeetUp>();
         }
 
-        public async Task AddMeetUp(MeetUp meetUp)
+        public void AddMeetUp(MeetUp meetUp)
         {
             _tiFateDbContext.MeetUp.Add(meetUp);
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task UpdateMeetUp(MeetUp newMeetUp)
+        public void UpdateMeetUp(MeetUp newMeetUp)
         {
             var oldMeetUp = _tiFateDbContext.MeetUp.Find(newMeetUp.Id);
 
@@ -49,18 +47,18 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             oldMeetUp.PublishTime = newMeetUp.PublishTime;
             oldMeetUp.Content = newMeetUp.Content;
 
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task DeleteMeetUp(int id)
+        public void DeleteMeetUp(int id)
         {
-            var deleteMeetUp =await _tiFateDbContext.MeetUp.FindAsync(id);
+            var deleteMeetUp = _tiFateDbContext.MeetUp.Find(id);
             if (deleteMeetUp == null)
             {
                 return;
             }
             deleteMeetUp.IsDelete = true;
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
     }

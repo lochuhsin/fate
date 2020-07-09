@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Ti_Fate.Dao.Model;
 using Ti_Fate.Dao.Repositories.DBContext;
 using Ti_Fate.Dao.Repositories.Interface;
@@ -17,30 +15,30 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             _tiFateDbContext = tiFateDbContext;
         }
 
-        public async Task<Welfare> GetWelfareById(int id)
+        public Welfare GetWelfareById(int id)
         {
-            return await _tiFateDbContext.Welfare.FindAsync(id);
+            return _tiFateDbContext.Welfare.Find(id);
         }
 
-        public async Task<List<Welfare>> GetWelfareByTitle(string title)
+        public List<Welfare> GetWelfareByTitle(string title)
         {
-            var welfareQuery = _tiFateDbContext.Welfare.Where(w => w.Title.Contains(title) && !w.IsDelete);
-            return welfareQuery.Any()? await welfareQuery.ToListAsync():new List<Welfare>();
+            var welfares = _tiFateDbContext.Welfare.Where(w => w.Title.Contains(title) && !w.IsDelete);
+            return welfares.Any() ? welfares.ToList() : new List<Welfare>();
         }
 
-        public async Task<List<Welfare>> GetAllWelfare()
+        public List<Welfare> GetAllWelfare()
         {
-            var welfare = _tiFateDbContext.Welfare.Where(w=>!w.IsDelete).OrderByDescending(w => w.Id);
-            return welfare.Any() ? await welfare.ToListAsync() : new List<Welfare>();
+            var welfare = _tiFateDbContext.Welfare.Where(w => !w.IsDelete).OrderByDescending(w => w.Id);
+            return welfare.Any() ? welfare.ToList() : new List<Welfare>();
         }
 
-        public async Task AddWelfare(Welfare welfare)
+        public void AddWelfare(Welfare welfare)
         {
             _tiFateDbContext.Welfare.Add(welfare);
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task UpdateWelfare(Welfare newWelfare)
+        public void UpdateWelfare(Welfare newWelfare)
         {
             var oldWelfare = _tiFateDbContext.Welfare.Find(newWelfare.Id);
 
@@ -50,10 +48,10 @@ namespace Ti_Fate.Dao.Repositories.Implementations
             oldWelfare.PublishTime = newWelfare.PublishTime;
             oldWelfare.Content = newWelfare.Content;
 
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
 
-        public async Task DeleteWelfare(int id)
+        public void DeleteWelfare(int id)
         {
             var deleteWelfare = _tiFateDbContext.Welfare.Find(id);
             if (deleteWelfare == null)
@@ -61,7 +59,7 @@ namespace Ti_Fate.Dao.Repositories.Implementations
                 return;
             }
             deleteWelfare.IsDelete = true;
-            await _tiFateDbContext.SaveChangesAsync();
+            _tiFateDbContext.SaveChanges();
         }
     }
 }

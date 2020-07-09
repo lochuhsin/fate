@@ -5,11 +5,11 @@ namespace Ti_Fate.ViewModels
 {
     public class MeetUpViewModel
     {
-        public MeetUpViewModel(IEnumerable<MeetUpDomainModel> domainModelList)
+        public MeetUpViewModel(List<MeetUpDomainModel> domainModelList)
         {
             DomainModelList = domainModelList ;
         }
 
-        public IEnumerable<MeetUpDomainModel> DomainModelList { get; set; }
+        public List<MeetUpDomainModel> DomainModelList { get; set; }
     }
 }

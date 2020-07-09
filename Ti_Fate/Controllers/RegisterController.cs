@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System;
+using System.Net;
 using System.Web;
 using Ti_Fate.Core.DbService.Interface;
 using Ti_Fate.Core.DomainModel;
+using Ti_Fate.Core.Service;
 using Ti_Fate.Core.Service.Interface;
 using Ti_Fate.ViewModels;
 
@@ -13,14 +14,12 @@ namespace Ti_Fate.Controllers
     public class RegisterController : Controller
     {
         private readonly IProfileDbService _profileDbService;
-        private readonly IConfiguration _configuration;
         private readonly IManageFileService _manageFileService;
         private readonly IConvertContextService _convertContextService;
 
-        public RegisterController(IProfileDbService profileDbService, IConfiguration configuration, IManageFileService manageFileService, IConvertContextService convert)
+        public RegisterController(IProfileDbService profileDbService, IManageFileService manageFileService, IConvertContextService convert)
         {
             _profileDbService = profileDbService;
-            _configuration = configuration;
             _manageFileService = manageFileService;
             _convertContextService = convert;
         }
@@ -28,11 +27,9 @@ namespace Ti_Fate.Controllers
         public IActionResult Register()
         {
             var account = HttpContext.Session.GetString("Account");
+            HttpContext.Session.Remove("Account");
             return View(new RegisterViewModel(account));
         }
-
-
-
 
         [HttpPost]
         public IActionResult Register(RegisterViewModel register)
@@ -55,7 +52,7 @@ namespace Ti_Fate.Controllers
                 Department = HttpUtility.HtmlEncode(register.Department),
                 TeamName = HttpUtility.HtmlEncode(register.TeamName),
                 Introduce = HttpUtility.HtmlEncode(register.Introduce),
-                PermissionId = _configuration.GetValue<int>("PermissionId:User"),
+                Permission = PermissionsService.GetUserPermission(),
                 OnBoardDate = register.OnBoardDate,
                 Location = HttpUtility.HtmlEncode(register.Location)
             };

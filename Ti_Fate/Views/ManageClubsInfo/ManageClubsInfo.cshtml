@@ -1,22 +1,15 @@
-﻿@using Ti_Fate.Core.Tools
+﻿@using Ti_Fate.Core.DomainModel
+@using Ti_Fate.Core.Service
+@using Ti_Fate.Core.Tools
+@using Ti_Fate.Extensions
 @model Ti_Fate.ViewModels.ManageClubsInfoViewModel
-
-
-<link href="~/css/summernote-lite.min.css" rel="stylesheet">
-<script src="~/js/plugins/summernote-lite.min.js"></script>
-<style type="text/css">
-    .open .form-control {
-        color: #42515f;
-    }
-
-    .note-modal-footer {
-        height: 60px;
-    }
-</style>
+@{
+    var loginSession = Context.Session.GetObject<LoginSession>("LoginSession");
+}
 <div class="row container-fluid">
     <label class="btn-lg btn-success btn-round animation-on-hover">
         @{
-            if (Model.IsAddClubsInfo())
+            if (PermissionsService.IsClubs(loginSession.Permission))
             {
                 <i class="tim-icons icon-pin" style="margin-bottom: 5%; margin-right: 10px"></i>
                 <span>新增社團公告</span>
@@ -50,18 +43,18 @@
                         </div>
                         <div class="form-group">
                             <h4 class="header-title">公告標題</h4>
-                            <input asp-for="Title" class="form-control" placeholder="請輸入公告標題..."/>
+                            <input asp-for="Title" class="form-control" placeholder="請輸入公告標題..." />
                         </div>
 
                         <div class="form-group row">
                             <div class="col">
                                 <h4 class="header-title">開始時間</h4>
-                                <input asp-for="StartTime" value="@Model.StartTime?.ToString("s")" type="datetime-local" class="form-control" min="2020-01-01">
+                                <input id="StartDate" asp-for="StartTime" value="@Model.StartTime?.ToString("s")" type="datetime-local" class="form-control" min="2020-01-01" onchange="checkDate()">
                                 <small class="form-text text-muted">請輸入活動開始時間</small>
                             </div>
                             <div class="col">
                                 <h4 class="header-title">結束時間</h4>
-                                <input asp-for="EndTime" value="@Model.EndTime?.ToString("s")" type="datetime-local" class="form-control">
+                                <input id="EndDate" asp-for="EndTime" value="@Model.EndTime?.ToString("s")" type="datetime-local" class="form-control">
                                 <small class="form-text text-muted">請輸入活動結束時間，若未填寫則不顯示</small>
                             </div>
                         </div>
@@ -77,7 +70,7 @@
                     <button class="btn btn-success btn-lg animation-on-hover" style="margin: 10px auto">
                         送出
                     </button>
-                    @if (!Model.IsAddClubsInfo())
+                    @if (!PermissionsService.IsClubs(loginSession.Permission))
                     {
                         <a data-toggle="modal" data-target="#deleteModal" class="btn btn-danger btn-lg animation-on-hover" style="margin: 10px auto">
                             刪除
@@ -109,3 +102,5 @@
     </div>
 </div>
 <script src="~/js/plugins/summernote.js"></script>
+<script src="~/js/CheckDate.js"></script>
+

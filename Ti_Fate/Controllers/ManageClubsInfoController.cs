@@ -24,14 +24,14 @@ namespace Ti_Fate.Controllers
             _clubsDbService = clubsDbService;
         }
 
-        [ValidatePermission]
+        [ValidateAnnouncementPermission]
         public IActionResult AddClubsInfo(string announcementType)
         {
             HttpContext.Session.Remove("ClubsInfoId");
             return View("ManageClubsInfo", new ManageClubsInfoViewModel(_clubsDbService.GetClubsDomainModelList()));
         }
 
-        [ValidatePermission]
+        [ValidateAnnouncementPermission]
         public IActionResult EditClubsInfo(string announcementType, int id)
         {
             HttpContext.Session.SetInt32("ClubsInfoId", id);
@@ -42,7 +42,7 @@ namespace Ti_Fate.Controllers
         [HttpPost]
         public IActionResult ManageClubsInfo(ManageClubsInfoViewModel manageClubsInfo)
         {
-            if (!ModelState.IsValid || !ClubNameIsValid(manageClubsInfo))
+            if (!ModelState.IsValid || !ClubNameIsValid(manageClubsInfo) || !EndTimeIsValid(manageClubsInfo))
             {
                 manageClubsInfo.InitializeDropDownList(_clubsDbService.GetClubsDomainModelList());
                 return View(nameof(manageClubsInfo), manageClubsInfo);
@@ -63,7 +63,8 @@ namespace Ti_Fate.Controllers
             return RedirectToAction("ClubsInfo", "ClubsInfo");
         }
 
-        [ValidatePermission]
+
+        [ValidateAnnouncementPermission]
         public IActionResult DeleteClubsInfo(string announcementType, int id)
         {
             _clubsInfoDbService.DeleteClubsInfo(id);
@@ -75,6 +76,15 @@ namespace Ti_Fate.Controllers
             var clubsInfoId = HttpContext.Session.GetInt32("ClubsInfoId") ?? 0;
             HttpContext.Session.Remove("ClubsInfoId");
             return clubsInfoId;
+        }
+        private bool EndTimeIsValid(ManageClubsInfoViewModel manageClubsInfo)
+        {
+            if (manageClubsInfo.EndTime < manageClubsInfo.StartTime)
+            {
+                ModelState.AddModelError(nameof(manageClubsInfo.EndTime), "活動結束時間不可小於開始時間");
+                return false;
+            }
+            return true;
         }
 
         private bool ClubNameIsValid(ManageClubsInfoViewModel manageClubsInfo)

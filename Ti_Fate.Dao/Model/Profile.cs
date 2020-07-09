@@ -32,7 +32,7 @@ namespace Ti_Fate.Dao.Model
         public string Drink { get; set; }
         public string Relationship { get; set; }
 
-        public int PermissionId { get; set; }
+        public int Permission { get; set; }
         public int FaterId { get; set; }
     }
 }

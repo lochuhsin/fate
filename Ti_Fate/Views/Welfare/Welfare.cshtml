@@ -1,5 +1,6 @@
 ﻿@using Ti_Fate.Extensions
 @using Ti_Fate.Core.DomainModel
+@using Ti_Fate.Core.Service
 @model Ti_Fate.ViewModels.WelfareViewModel
 
 @{
@@ -10,7 +11,7 @@
     <label class="btn-lg btn-success btn-round animation-on-hover">
         <i class="tim-icons icon-pin" style="margin-bottom: 5%; margin-right: 10px"></i>福委公告
     </label>
-    @if (loginSession.AccountPermission.ModifyWelfare)
+    @if (PermissionsService.IsWelfare(loginSession.Permission))
     {
         <div class="ml-auto">
             <a asp-controller="ManageWelfare" asp-action="AddWelfare" asp-route-announcementType="Welfare" class="btn btn-info btn-simple">
@@ -32,7 +33,7 @@
                         <i class="tim-icons icon-pin"></i>
                         @welfare.Title
                     </h3>
-                    @if (loginSession.AccountPermission.ModifyWelfare)
+                    @if (PermissionsService.IsWelfare(loginSession.Permission))
                     {
                         <div class="flex-column-reverse">
                             <label onclick="location.href = '@Url.Action("EditWelfare", "ManageWelfare", new {id = welfare.Id, announcementType = "Welfare"})'" class="btn btn-info btn-simple btn-icon btn-round">
